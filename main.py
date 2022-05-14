@@ -1,0 +1,242 @@
+import pandas as pd
+from altair.examples.ranged_dot_plot import chart
+import json
+import altair as alt
+from altair import pipe, limit_rows, to_values
+
+alt.data_transformers.register('custom', lambda data: pipe(data, limit_rows(max_rows=10000), to_values))
+alt.data_transformers.enable('custom')
+alt.renderers.enable('altair_viewer')
+
+with open('json/json1.json', encoding='utf-8-sig') as f:
+    json_data = json.load(f)
+
+data1 = pd.json_normalize(json_data['trades'], record_path=['orders'], meta=['tradeNo'])
+data2 = pd.json_normalize(json_data, record_path=['trades'])
+data3 = pd.json_normalize(json_data)
+
+# print("data3 before Drop is:", data3)
+data3.drop(data3.columns.difference(['performance.startAllocation']), 1, inplace=True)
+
+# print("Data2 Non Filtered is:", data2.keys())
+isSell = ['Sell']
+filtered = data1[data1['side'].isin(isSell)]
+
+
+data2.drop(data2.columns.difference(['tradeNo', 'profit', 'profitPercentage', 'accumulatedBalance',
+                                     'currencyPairDetails.quote', 'compoundProfitPerc',
+                                     'strategyCompoundProfitPerc']), 1, inplace=True)
+
+
+merged = pd.merge(filtered, data2)
+merged["startAlloc"] = pd.Series([data3['performance.startAllocation'][0] for x in range(len(merged.index))])
+
+diff = merged["startAlloc"][0]
+
+
+def get_cumBal(startAlloc, profit):
+    global diff
+    if diff == startAlloc:
+        diff = startAlloc + profit
+    else:
+        diff += profit
+
+    return diff
+
+
+merged["cumBal"] = merged.apply(lambda x: get_cumBal(x['startAlloc'], x['profit']), axis=1)
+
+
+def get_profit(cumBal, startAlloc):
+    inc = cumBal - startAlloc
+    prof = inc / startAlloc
+    return prof
+
+
+merged["cumProf"] = merged.apply(lambda x: get_profit(x['cumBal'], x['startAlloc']), axis=1)
+
+
+# print("data1 is:", data1.keys())
+# print("data2 is:", data2.keys())
+# print("data3 is:", data3.keys())
+# print("filtered is:", filtered.keys())
+print("merged is:", merged.keys())
+merged.to_csv('Trade-Data.csv')
+
+coin = 'na'
+for col in data2:
+    if col == 'currencyPairDetails.quote':
+        coin = data2[col]
+    else:
+        coin = 'na'
+
+startAlloc = 'na'
+
+for col1 in data3:
+    if col1 == 'performance.startAllocation':
+        startAlloc = data3[col1]
+    else:
+        startAlloc = 'na'
+
+
+chart.properties(width=700).configure_axisY(
+    titleAngle=0,
+    titleY=-10,
+    titleX=-60,
+    labelPadding=160,
+    labelAlign='left'
+)
+
+
+# merged['compoundProfitPerc100'] = merged['compoundProfitPerc'] * 100.0
+merged['maxValPerc'] = merged['compoundProfitPerc'].max()
+merged['minValPerc'] = merged['compoundProfitPerc'].min()
+
+
+y_range_max_1 = merged['maxValPerc'].max()
+y_range_min_1 = merged['minValPerc'].min()
+
+x_range_max_1 = merged['filledTime'].max()
+x_range_min_1 = merged['filledTime'].min()
+
+merged['maxValBal'] = merged['accumulatedBalance'].max()
+merged['minValBal'] = merged['accumulatedBalance'].min()
+
+
+y_range_max_2 = merged['maxValBal'].max()
+y_range_min_2 = merged['minValBal'].min()
+
+x_range_max_2 = merged['filledTime'].max()
+x_range_min_2 = merged['filledTime'].min()
+
+
+nearest = alt.selection(type='single', nearest=True, on='mouseover',
+                        fields=['cumProf'], empty='none')
+
+nearest1 = alt.selection(type='single', nearest=True, on='mouseover',
+                         fields=['accumulatedBalance'], empty='none')
+
+chart = alt.Chart(merged).mark_line(
+    interpolate='basis',
+    line={'color': 'yellow'},
+    opacity=0.5
+    ).encode(
+    x=alt.X('filledTime:T', scale=alt.Scale(nice=False),
+            axis=alt.Axis(formatType="timeUnit", format="%B of %Y", title='Date',
+                          labelAngle=-70,
+                          labelSeparation=3,
+                          labelPadding=0,
+                          labelOverlap=True)),
+    y=alt.Y('cumProf', scale=alt.Scale(nice=False),
+            axis=alt.Axis(labelSeparation=3,
+                          labelPadding=0,
+                          labelOverlap=True)),
+)
+
+
+selectors = alt.Chart(merged).mark_point().encode(
+    x='filledTime:T',
+    opacity=alt.value(0),
+).add_selection(
+    nearest
+)
+
+
+# Draw points on the line, and highlight based on selection
+points = chart.mark_point().encode(
+    opacity=alt.condition(nearest, alt.value(1), alt.value(0))
+)
+
+# Draw text labels near the points, and highlight based on selection
+text = chart.mark_text(align='left', dx=5, dy=-5).encode(
+    text=alt.condition(nearest, 'cumProf', alt.value(' '))
+)
+
+# Draw a rule at the location of the selection
+rules = alt.Chart(merged).mark_rule(color='gray').encode(
+    x='filledTime:T',
+).transform_filter(
+    nearest
+)
+
+# Put the five layers into a chart and bind the data
+plot = alt.layer(
+    chart.mark_line(color='blue').encode(
+        y=alt.Y('cumProf', scale=alt.Scale(nice=False),
+                axis=alt.Axis(title=f'Accumulated % of {startAlloc[0]} {coin[1]}', grid=True, format='%',
+                              offset=0))),
+    selectors,
+    points,
+    text,
+    rules
+).properties(
+    width=800,
+    height=500
+)
+
+
+######
+
+chart1 = alt.Chart(merged).mark_line(
+    interpolate='basis',
+    line={'color': 'yellow'},
+    opacity=0.5
+    ).encode(
+    x=alt.X('filledTime:T', scale=alt.Scale(nice=False),
+            axis=alt.Axis(formatType="timeUnit", format="%B of %Y", title='Date',
+                          labelAngle=-70,
+                          labelSeparation=3,
+                          labelPadding=0,
+                          labelOverlap=True)),
+    y=alt.Y('accumulatedBalance', scale=alt.Scale(nice=False),
+            axis=alt.Axis(labelSeparation=3,
+                          labelPadding=0,
+                          labelOverlap=True)),
+)
+
+
+selectors1 = alt.Chart(merged).mark_point().encode(
+    y='accumulatedBalance',
+    opacity=alt.value(0),
+).add_selection(
+    nearest1
+)
+
+
+# Draw points on the line, and highlight based on selection
+points1 = chart1.mark_point().encode(
+    opacity=alt.condition(nearest, alt.value(1), alt.value(0))
+)
+
+# Draw text labels near the points, and highlight based on selection
+text1 = chart1.mark_text(align='left', dx=5, dy=-5).encode(
+    text=alt.condition(nearest, 'accumulatedBalance', alt.value(' '))
+)
+
+# Draw a rule at the location of the selection
+rules1 = alt.Chart(merged).mark_rule(color='gray').encode(
+    y='accumulatedBalance',
+).transform_filter(
+    nearest1
+)
+
+# Put the five layers into a chart and bind the data
+plot1 = alt.layer(
+    chart1.mark_line(color='blue').encode(
+        y=alt.Y('accumulatedBalance', scale=alt.Scale(nice=False, domain=(y_range_min_2, y_range_max_2)),
+                axis=alt.Axis(title=f'Accumulated {coin[1]}', grid=True,
+                              offset=0))),
+    selectors1,
+    points1,
+    text1,
+    rules1
+).properties(
+    width=600,
+    height=300
+)
+
+plot2 = plot #alt.hconcat(plot, plot1)
+plot2.save('BacktestData.html')
+
+plot2.show()
+
