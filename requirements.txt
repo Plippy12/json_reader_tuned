@@ -1,4 +1,5 @@
 pandas
 altair
 streamlit
+altair_viewer
 setuptools
