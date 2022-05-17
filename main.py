@@ -149,11 +149,9 @@ nearest1 = alt.selection(type='single', nearest=True, on='mouseover',
 result.reset_index(inplace=True)
 result['monthYear'] = "01" + "-" + result["filledTimeM"].astype(str) + "-" + result["filledTime"].astype(str)
 result['profit1'] = result['profit'] * 100.0
-print(result)
-print(result.keys())
 
-merged.to_csv('Trade-Data.csv')
-result.to_csv('Monthly-Data.csv')
+# merged.to_csv('Trade-Data.csv')
+# result.to_csv('Monthly-Data.csv')
 
 bars = alt.Chart(result).mark_bar().encode(
     x=alt.X('monthYear:O', sort=alt.EncodingSortField(field="monthYear", op='count', order='ascending'),
@@ -226,69 +224,6 @@ plot = alt.layer(
 )
 
 
-######
-#
-# chart1 = alt.Chart(merged).mark_line(
-#     interpolate='basis',
-#     line={'color': 'yellow'},
-#     opacity=0.5
-#     ).encode(
-#     x=alt.X('filledTime:T', scale=alt.Scale(nice=False),
-#             axis=alt.Axis(formatType="timeUnit", format="%B of %Y", title='Date',
-#                           labelAngle=-70,
-#                           labelSeparation=3,
-#                           labelPadding=0,
-#                           labelOverlap=True)),
-#     y=alt.Y('accumulatedBalance', scale=alt.Scale(nice=False),
-#             axis=alt.Axis(labelSeparation=3,
-#                           labelPadding=0,
-#                           labelOverlap=True)),
-# )
-#
-#
-# selectors1 = alt.Chart(merged).mark_point().encode(
-#     y='accumulatedBalance',
-#     opacity=alt.value(0),
-# ).add_selection(
-#     nearest1
-# )
-#
-#
-# # Draw points on the line, and highlight based on selection
-# points1 = chart1.mark_point().encode(
-#     opacity=alt.condition(nearest, alt.value(1), alt.value(0))
-# )
-#
-# # Draw text labels near the points, and highlight based on selection
-# text1 = chart1.mark_text(align='left', dx=5, dy=-5).encode(
-#     text=alt.condition(nearest, 'accumulatedBalance', alt.value(' '))
-# )
-#
-# # Draw a rule at the location of the selection
-# rules1 = alt.Chart(merged).mark_rule(color='gray').encode(
-#     y='accumulatedBalance',
-# ).transform_filter(
-#     nearest1
-# )
-#
-# # Put the five layers into a chart and bind the data
-# plot1 = alt.layer(
-#     chart1.mark_line(color='blue').encode(
-#         y=alt.Y('accumulatedBalance', scale=alt.Scale(nice=False, domain=(y_range_min_2, y_range_max_2)),
-#                 axis=alt.Axis(title=f'Accumulated {coin[1]}', grid=True,
-#                               offset=0))),
-#     selectors1,
-#     points1,
-#     text1,
-#     rules1
-# ).properties(
-#     width=600,
-#     height=300
-# )
-
 plot2 = alt.vconcat(plot, bars)
-plot2.save('BacktestData.html')
-
-# plot2.show()
 
 st.altair_chart(plot2, use_container_width=True)
