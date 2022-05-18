@@ -13,13 +13,6 @@ alt.data_transformers.enable('custom')
 alt.renderers.enable('altair_viewer')
 
 
-def json_load(json_data1):
-    with open(json_data1, encoding='utf-8-sig') as f:
-        json_data1 = json.load(f)
-
-    return json_data1
-
-
 uploaded_file = st.file_uploader("Choose a file", type=['json'])
 
 
