@@ -8,7 +8,7 @@ import streamlit as st
 
 st.set_page_config(page_title='Dashboard', page_icon="🔌", layout='wide', initial_sidebar_state='expanded')
 
-st.header("Upload a JSON file to populate charts!")
+st.header("Upload a Tuned Backtest JSON file to populate charts!")
 
 alt.data_transformers.register('custom', lambda data: pipe(data, limit_rows(max_rows=10000), to_values))
 alt.data_transformers.enable('custom')
