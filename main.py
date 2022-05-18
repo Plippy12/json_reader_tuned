@@ -8,6 +8,8 @@ import streamlit as st
 
 st.set_page_config(page_title='Dashboard', page_icon="🔌", layout='wide', initial_sidebar_state='expanded')
 
+st.header("Upload a JSON file to populate charts!")
+
 alt.data_transformers.register('custom', lambda data: pipe(data, limit_rows(max_rows=10000), to_values))
 alt.data_transformers.enable('custom')
 alt.renderers.enable('altair_viewer')
@@ -17,13 +19,8 @@ uploaded_file = st.file_uploader("Choose a file", type=['json'])
 
 
 if uploaded_file is not None:
-    def json_load(json_data1):
-        with open(json_data1, encoding='utf-8-sig') as f:
-            json_data1 = json.load(f)
 
-        return json_data1
-
-    json_data = json_load(uploaded_file)
+    json_data = json.load(uploaded_file)
 
     data1 = pd.json_normalize(json_data['trades'], record_path=['orders'], meta=['tradeNo'])
     data2 = pd.json_normalize(json_data, record_path=['trades'])
@@ -33,7 +30,6 @@ if uploaded_file is not None:
 
     data3.drop(data3.columns.difference(['performance.startAllocation']), 1, inplace=True)
 
-    # print("Data2 Non Filtered is:", data2.keys())
     isSell = ['Sell']
     filtered = data1[data1['side'].isin(isSell)]
 
@@ -222,4 +218,4 @@ if uploaded_file is not None:
     st.altair_chart(plot2, use_container_width=True)
 
 
-st.header("Upload a JSON file to populate charts!")
+st.text("JSON not uploaded")
