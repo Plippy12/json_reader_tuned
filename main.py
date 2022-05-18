@@ -17,6 +17,12 @@ uploaded_file = st.file_uploader("Choose a file", type=['json'])
 
 
 if uploaded_file is not None:
+    def json_load(json_data1):
+        with open(json_data1, encoding='utf-8-sig') as f:
+            json_data1 = json.load(f)
+
+        return json_data1
+
     json_data = json_load(uploaded_file)
 
     data1 = pd.json_normalize(json_data['trades'], record_path=['orders'], meta=['tradeNo'])
