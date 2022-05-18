@@ -17,6 +17,7 @@ alt.renderers.enable('altair_viewer')
 
 uploaded_file = st.file_uploader("Choose a file", type=['json'])
 
+# uploaded_file = open('json.json')
 
 if uploaded_file is not None:
 
@@ -31,12 +32,14 @@ if uploaded_file is not None:
     data3.drop(data3.columns.difference(['performance.startAllocation']), 1, inplace=True)
 
     isSell = ['Sell']
-    filtered = data1[data1['side'].isin(isSell)]
+    closeLong = ['CloseLong']
+    closeShort = ['CloseShort']
+    strFilt = ['Sell', 'CloseLong', 'CloseShort']
+    filtered = data1[data1['side'].isin(strFilt)]
 
     data2.drop(data2.columns.difference(['tradeNo', 'profit', 'profitPercentage', 'accumulatedBalance',
                                          'currencyPairDetails.quote', 'compoundProfitPerc',
                                          'strategyCompoundProfitPerc']), 1, inplace=True)
-
 
     merged = pd.merge(filtered, data2)
     merged.drop(merged.columns.difference(['side', 'filledTime', 'profit', 'profitPercentage', 'accumulatedBalance',
@@ -52,8 +55,7 @@ if uploaded_file is not None:
     merged['filledTimeM'] = pd.to_datetime(merged['filledTime'])
     merged['filledTimeD'] = pd.to_datetime(merged['filledTime'])
 
-    result = merged.groupby([merged['filledTime'].dt.year, merged['filledTimeM'].dt.month]).agg({'profit':sum})
-
+    result = merged.groupby([merged['filledTime'].dt.year, merged['filledTimeM'].dt.month]).agg({'profit': sum})
 
     def get_cumBal(startAlloc, profit):
         global diff
@@ -76,15 +78,6 @@ if uploaded_file is not None:
 
     merged["cumProf"] = merged.apply(lambda x: get_profit(x['cumBal'], x['startAlloc']), axis=1)
 
-
-    # print("data1 is:", data1.keys())
-    # print("data2 is:", data2.keys())
-    # print("data3 is:", data3.keys())
-    # print("filtered is:", filtered.keys())
-    print("merged is:", merged.keys())
-
-
-
     coin = 'na'
     for col in data2:
         if col == 'currencyPairDetails.quote':
@@ -100,7 +93,6 @@ if uploaded_file is not None:
         else:
             startAlloc = 'na'
 
-
     chart.properties(width=700).configure_axisY(
         titleAngle=0,
         titleY=-10,
@@ -108,7 +100,6 @@ if uploaded_file is not None:
         labelPadding=160,
         labelAlign='left'
     )
-
 
     merged['maxValPerc'] = merged['cumProf'].max()
     merged['minValPerc'] = merged['cumProf'].min()
@@ -122,13 +113,11 @@ if uploaded_file is not None:
     merged['maxValBal'] = merged["cumBal"].max()
     merged['minValBal'] = merged["cumBal"].min()
 
-
     y_range_max_2 = merged['maxValBal'].max()
     y_range_min_2 = merged['minValBal'].min()
 
     x_range_max_2 = merged['filledTime'].max()
     x_range_min_2 = merged['filledTime'].min()
-
 
     nearest = alt.selection(type='single', nearest=True, on='mouseover',
                             fields=['cumProf'], empty='none')
@@ -148,10 +137,9 @@ if uploaded_file is not None:
                 scale=alt.Scale(nice=False),
                 axis=alt.Axis(formatType="timeUnit", title='Date')),
         y=alt.Y('profit1', scale=alt.Scale(nice=False),
-                axis=alt.Axis(title=f'Accumulated % of {startAlloc[0]} {coin[1]} Per Month', grid=True, #, format='%.2f'
+                axis=alt.Axis(title=f'Accumulated % of {startAlloc[0]} {coin[1]} Per Month', grid=True,
                               offset=0))
     )
-
 
     chart = alt.Chart(merged).mark_line(
         interpolate='basis',
@@ -172,14 +160,12 @@ if uploaded_file is not None:
         title=f'{titleData["name"][0]} - {titleData["type"][0]} - Trading {coinData["coinPair"][0]}'
     )
 
-
     selectors = alt.Chart(merged).mark_point().encode(
         x='filledTime:T',
         opacity=alt.value(0),
     ).add_selection(
         nearest
     )
-
 
     # Draw points on the line, and highlight based on selection
     points = chart.mark_point().encode(
