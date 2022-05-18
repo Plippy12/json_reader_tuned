@@ -24,9 +24,7 @@ uploaded_file = st.file_uploader("Choose a file", type=['json'])
 
 
 if uploaded_file is not None:
-    json_load(uploaded_file)
-
-    json_data = json.load(uploaded_file)
+    json_data = json_load(uploaded_file)
 
     data1 = pd.json_normalize(json_data['trades'], record_path=['orders'], meta=['tradeNo'])
     data2 = pd.json_normalize(json_data, record_path=['trades'])
