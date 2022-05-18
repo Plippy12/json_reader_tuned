@@ -217,5 +217,5 @@ if uploaded_file is not None:
 
     st.altair_chart(plot2, use_container_width=True)
 
-
-st.text("JSON not uploaded")
+else:
+    st.text("JSON not uploaded")
