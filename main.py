@@ -38,15 +38,14 @@ if uploaded_file is not None:
     filtered = data1[data1['side'].isin(strFilt)]
 
     commSum = data1['commissionPaid'].sum(axis=0)
-    # for x in data1['commissionPaid']:
-    #     data1['commissionPaidCum'] += x
 
     data2.drop(data2.columns.difference(['tradeNo', 'profit', 'profitPercentage', 'accumulatedBalance',
                                          'currencyPairDetails.quote', 'currencyPairDetails.base', 'compoundProfitPerc',
                                          'strategyCompoundProfitPerc']), 1, inplace=True)
 
     merged = pd.merge(filtered, data2)
-    merged.drop(merged.columns.difference(['side', 'filledTime', 'profit', 'profitPercentage', 'accumulatedBalance',
+    merged.drop(merged.columns.difference(['side', 'tradeNo', 'filledTime', 'profit', 'profitPercentage',
+                                           'accumulatedBalance',
                                            'compoundProfitPerc', 'strategyCompoundProfitPerc',
                                            'currencyPairDetails.base',
                                            'currencyPairDetails.quote', 'startAlloc', 'cumBal', 'cumProf']),
@@ -80,8 +79,26 @@ if uploaded_file is not None:
         prof = inc / startAlloc
         return prof
 
+    def get_proftrades(profit):
+        if float(profit) > 0:
+            profit_check = 1
+        else:
+            profit_check = 0
+        return profit_check
+
+
+    merged['profitableTrades'] = merged.apply(lambda x: get_proftrades(x['profit']), axis=1)
 
     merged["cumProf"] = merged.apply(lambda x: get_profit(x['cumBal'], x['startAlloc']), axis=1)
+
+    merged['profitableTradesTot'] = merged['profitableTrades'].cumsum()
+
+    def get_proftradesTot(totalTrades, winningTrades):
+        tradesPerc = int(winningTrades) / int(totalTrades) * 100.0
+        return tradesPerc
+
+    merged['profitableTradesRolSum'] = merged.apply(lambda x: get_proftradesTot(x['tradeNo']+1, x['profitableTradesTot']),
+                                                    axis=1)
 
     coin = 'na'
     for col in data2:
@@ -153,6 +170,23 @@ if uploaded_file is not None:
                               offset=0))
     )
 
+    trades = alt.Chart(merged).mark_line(
+        interpolate='basis',
+        line={'color': 'yellow'},
+        opacity=0.5
+        ).encode(
+        x=alt.X('filledTime:T', scale=alt.Scale(nice=False),
+                axis=alt.Axis(formatType="timeUnit", format="%B of %Y", title='Date',
+                              labelAngle=-70,
+                              labelSeparation=3,
+                              labelPadding=0,
+                              labelOverlap=True)),
+        y=alt.Y('profitableTradesRolSum',
+                axis=alt.Axis(title=f'Profitable Trades Percentage', labelSeparation=3,
+                              labelPadding=0,
+                              labelOverlap=True)),
+    )
+
     chart = alt.Chart(merged).mark_line(
         interpolate='basis',
         line={'color': 'yellow'},
@@ -211,7 +245,7 @@ if uploaded_file is not None:
         height=400
     )
 
-    plot2 = alt.vconcat(plot, bars)
+    plot2 = alt.vconcat(plot, bars, trades)
 
     st.altair_chart(plot2, use_container_width=True)
     st.text(f'Total Commission Paid: {round(commSum, 4)} in {data2["currencyPairDetails.base"][1]}')
