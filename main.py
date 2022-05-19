@@ -214,7 +214,7 @@ if uploaded_file is not None:
     plot2 = alt.vconcat(plot, bars)
 
     st.altair_chart(plot2, use_container_width=True)
-    st.text(f'total Commission Paid: {round(commSum, 4)} in {data2["currencyPairDetails.base"][1]}')
+    st.text(f'Total Commission Paid: {round(commSum, 4)} in {data2["currencyPairDetails.base"][1]}')
 
 else:
     st.text("JSON not uploaded")
