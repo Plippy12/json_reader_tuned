@@ -37,6 +37,10 @@ if uploaded_file is not None:
     strFilt = ['Sell', 'CloseLong', 'CloseShort']
     filtered = data1[data1['side'].isin(strFilt)]
 
+    commSum = data1['commissionPaid'].sum(axis=0)
+    # for x in data1['commissionPaid']:
+    #     data1['commissionPaidCum'] += x
+
     data2.drop(data2.columns.difference(['tradeNo', 'profit', 'profitPercentage', 'accumulatedBalance',
                                          'currencyPairDetails.quote', 'compoundProfitPerc',
                                          'strategyCompoundProfitPerc']), 1, inplace=True)
@@ -81,6 +85,13 @@ if uploaded_file is not None:
     coin = 'na'
     for col in data2:
         if col == 'currencyPairDetails.quote':
+            coin = data2[col]
+        else:
+            coin = 'na'
+
+    coin1 = 'na'
+    for col in data2:
+        if col == 'currencyPairDetails.base':
             coin = data2[col]
         else:
             coin = 'na'
@@ -202,6 +213,7 @@ if uploaded_file is not None:
     plot2 = alt.vconcat(plot, bars)
 
     st.altair_chart(plot2, use_container_width=True)
+    st.text(f'total Commission Paid: {round(commSum, 4)} in {coin1[1]}')
 
 else:
     st.text("JSON not uploaded")
