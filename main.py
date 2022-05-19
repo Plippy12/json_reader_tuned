@@ -92,9 +92,9 @@ if uploaded_file is not None:
     coin1 = 'na'
     for col in data2:
         if col == 'currencyPairDetails.base':
-            coin = data2[col]
+            coin1 = data2[col]
         else:
-            coin = 'na'
+            coin1 = 'na'
 
     startAlloc = 'na'
 
