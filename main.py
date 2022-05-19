@@ -47,7 +47,8 @@ if uploaded_file is not None:
 
     merged = pd.merge(filtered, data2)
     merged.drop(merged.columns.difference(['side', 'filledTime', 'profit', 'profitPercentage', 'accumulatedBalance',
-                                           'compoundProfitPerc', 'strategyCompoundProfitPerc', 'currencyPairDetails.base',
+                                           'compoundProfitPerc', 'strategyCompoundProfitPerc',
+                                           'currencyPairDetails.base',
                                            'currencyPairDetails.quote', 'startAlloc', 'cumBal', 'cumProf']),
                 1, inplace=True)
 
@@ -92,7 +93,7 @@ if uploaded_file is not None:
     coin1 = 'na'
     for col2 in data2:
         if col2 == 'currencyPairDetails.base':
-            coin1 = data2[col]
+            coin1 = data2[col2]
         else:
             coin1 = 'na'
 
