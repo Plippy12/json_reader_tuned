@@ -47,7 +47,7 @@ if uploaded_file is not None:
 
     merged = pd.merge(filtered, data2)
     merged.drop(merged.columns.difference(['side', 'filledTime', 'profit', 'profitPercentage', 'accumulatedBalance',
-                                           'compoundProfitPerc', 'strategyCompoundProfitPerc',
+                                           'compoundProfitPerc', 'strategyCompoundProfitPerc', 'currencyPairDetails.base',
                                            'currencyPairDetails.quote', 'startAlloc', 'cumBal', 'cumProf']),
                 1, inplace=True)
 
