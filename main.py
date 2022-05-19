@@ -42,7 +42,7 @@ if uploaded_file is not None:
     #     data1['commissionPaidCum'] += x
 
     data2.drop(data2.columns.difference(['tradeNo', 'profit', 'profitPercentage', 'accumulatedBalance',
-                                         'currencyPairDetails.quote', 'compoundProfitPerc',
+                                         'currencyPairDetails.quote', 'currencyPairDetails.base', 'compoundProfitPerc',
                                          'strategyCompoundProfitPerc']), 1, inplace=True)
 
     merged = pd.merge(filtered, data2)
@@ -90,8 +90,8 @@ if uploaded_file is not None:
             coin = 'na'
 
     coin1 = 'na'
-    for col in data2:
-        if col == 'currencyPairDetails.base':
+    for col2 in data2:
+        if col2 == 'currencyPairDetails.base':
             coin1 = data2[col]
         else:
             coin1 = 'na'
