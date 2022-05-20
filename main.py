@@ -265,7 +265,7 @@ if uploaded_file is not None:
         width=1000,
         height=600
     )
-
+    finalBal = merged["cumBal"][-1]
     st.subheader(f'This chart shows you the Accumulated % of {startAlloc[0]} {data2["currencyPairDetails.quote"][1]}')
     st.altair_chart(plot, use_container_width=True)
     st.subheader(f'This chart shows you the monthly gains of {startAlloc[0]} {data2["currencyPairDetails.quote"][1]}')
@@ -273,7 +273,7 @@ if uploaded_file is not None:
     st.subheader('This chart shows you the success rate over time')
     st.altair_chart(trades, use_container_width=True)
     st.text(f'Initial Allocation: {startAlloc[0]}')
-    st.text(f'Final Balance: {merged["cumBal"][-1]}')
+    st.text(f'Final Balance: {finalBal}')
     st.text(f'Total Commission Paid: {round(commSum, 2)} in {data2["currencyPairDetails.settleCurrency"][1]}')
 
 else:
