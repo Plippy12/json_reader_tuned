@@ -272,6 +272,7 @@ if uploaded_file is not None:
     st.altair_chart(bars, use_container_width=True)
     st.subheader('This chart shows you the success rate over time')
     st.altair_chart(trades, use_container_width=True)
+    st.text(f'Initial Allocation: {startAlloc[0]}')
     st.text(f'Total Commission Paid: {round(commSum, 2)} in {data2["currencyPairDetails.settleCurrency"][1]}')
 
 else:
