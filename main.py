@@ -133,13 +133,7 @@ if uploaded_file is not None:
         else:
             startAlloc = 'na'
 
-    chart.properties(width=700).configure_axisY(
-        titleAngle=0,
-        titleY=-10,
-        titleX=-60,
-        labelPadding=160,
-        labelAlign='left'
-    )
+
 
     merged['maxValPerc'] = merged['cumProf'].max()
     merged['minValPerc'] = merged['cumProf'].min()
@@ -206,6 +200,14 @@ if uploaded_file is not None:
     )
 
 
+    # chart.properties(width=700).configure_axisY(
+    #         titleAngle=0,
+    #         titleY=-10,
+    #         titleX=-60,
+    #         labelPadding=160,
+    #         labelAlign='left'
+    #     )
+
     chart = alt.Chart(merged).mark_line(
         interpolate='basis',
         line={'color': 'yellow'},
@@ -225,6 +227,12 @@ if uploaded_file is not None:
         title=f'{titleData["name"][0]} - {titleData["type"][0]} - Trading {coinData["coinPair"][0]}',
         width = 1000,
         height = 600
+    ).configure_axisY(
+        titleAngle=0,
+        titleY=-10,
+        titleX=-60,
+        labelPadding=160,
+        labelAlign='left'
     )
 
     selectors = alt.Chart(merged).mark_point().encode(
