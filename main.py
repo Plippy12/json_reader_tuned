@@ -180,6 +180,9 @@ if uploaded_file is not None:
                 axis=alt.Axis(title=f'Accumulated % of {startAlloc[0]} '
                                     f'{data2["currencyPairDetails.quote"][1]} Per Month', grid=True,
                               offset=0))
+    ).properties(
+        width=1000,
+        height=600
     )
 
     trades = alt.Chart(merged).mark_line(
@@ -219,7 +222,9 @@ if uploaded_file is not None:
                               labelPadding=0,
                               labelOverlap=True)),
     ).properties(
-        title=f'{titleData["name"][0]} - {titleData["type"][0]} - Trading {coinData["coinPair"][0]}'
+        title=f'{titleData["name"][0]} - {titleData["type"][0]} - Trading {coinData["coinPair"][0]}',
+        width = 1000,
+        height = 600
     )
 
     selectors = alt.Chart(merged).mark_point().encode(
