@@ -107,7 +107,8 @@ if uploaded_file is not None:
         tradesPerc = int(winningTrades) / int(totalTrades) * 100.0
         return tradesPerc
 
-    merged['profitableTradesRolSum'] = merged.apply(lambda x: get_proftradesTot(x['tradeNo']+1, x['profitableTradesTot']),
+    merged['profitableTradesRolSum'] = merged.apply(lambda x: get_proftradesTot(x['tradeNo']+1,
+                                                                                x['profitableTradesTot']),
                                                     axis=1)
 
     coin = 'na'
@@ -176,7 +177,8 @@ if uploaded_file is not None:
                 scale=alt.Scale(nice=False),
                 axis=alt.Axis(formatType="timeUnit", title='Date')),
         y=alt.Y('profit1', scale=alt.Scale(nice=False),
-                axis=alt.Axis(title=f'Accumulated % of {startAlloc[0]} {data2["currencyPairDetails.quote"]} Per Month', grid=True,
+                axis=alt.Axis(title=f'Accumulated % of {startAlloc[0]} '
+                                    f'{data2["currencyPairDetails.quote"][1]} Per Month', grid=True,
                               offset=0))
     )
 
@@ -244,7 +246,8 @@ if uploaded_file is not None:
     plot = alt.layer(
         chart.mark_line(color='blue').encode(
             y=alt.Y('cumProf', scale=alt.Scale(nice=False),
-                    axis=alt.Axis(title=f'Accumulated % of {startAlloc[0]} {data2["currencyPairDetails.quote"]}', grid=True, format='%',
+                    axis=alt.Axis(title=f'Accumulated % of {startAlloc[0]} {data2["currencyPairDetails.quote"][1]}',
+                                  grid=True, format='%',
                                   offset=0))),
         selectors,
         points,
