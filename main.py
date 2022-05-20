@@ -2,6 +2,7 @@ import pandas as pd
 from altair.examples.ranged_dot_plot import chart
 import json
 import altair as alt
+import numpy as np
 import altair_viewer
 from altair import pipe, limit_rows, to_values
 import streamlit as st
@@ -35,9 +36,16 @@ if uploaded_file is not None:
     closeLong = ['CloseLong']
     closeShort = ['CloseShort']
     strFilt = ['Sell', 'CloseLong', 'CloseShort']
+    buyFilt = ['Buy']
     filtered = data1[data1['side'].isin(strFilt)]
+    filteredCommBuy = data1[data1['side'].isin(buyFilt)]
+    data1['adjComm'] = adjustedCommBuy = np.where(data1['side'] == 'Buy',
+                                                  data1['commissionPaid'] * data1['filledPrice'],
+                                                  data1['commissionPaid'])
 
-    commSum = data1['commissionPaid'].sum(axis=0)
+    print(data1['adjComm'])
+
+    commSum = data1['adjComm'].sum(axis=0)
 
     data2.drop(data2.columns.difference(['tradeNo', 'profit', 'profitPercentage', 'accumulatedBalance',
                                          'currencyPairDetails.quote', 'currencyPairDetails.base', 'compoundProfitPerc',
@@ -93,9 +101,24 @@ if uploaded_file is not None:
 
     merged['profitableTradesTot'] = merged['profitableTrades'].cumsum()
 
+
     def get_proftradesTot(totalTrades, winningTrades):
         tradesPerc = int(winningTrades) / int(totalTrades) * 100.0
         return tradesPerc
+
+
+    # Binance Spot
+    # Buy Commission paid in positioncurrency (filledPrice * commissionPaid)
+    # Sell Commission paid in settleCurrency (commissionPaid)
+
+    # Binance Futures (USDT)
+    # Long/Short Commission paid in settleCurrency (commissionPaid)
+    # LongClose/ShortClose Commission paid in settleCurrency (commissionPaid)
+
+    # Binance Coin Fut
+    # Long/Short Commission paid in settleCurrency (commissionPaid)
+    # LongClose/ShortClose Commission paid in settleCurrency(commissionPaid)
+
 
     merged['profitableTradesRolSum'] = merged.apply(lambda x: get_proftradesTot(x['tradeNo']+1, x['profitableTradesTot']),
                                                     axis=1)
@@ -248,7 +271,7 @@ if uploaded_file is not None:
     plot2 = alt.vconcat(plot, bars, trades)
 
     st.altair_chart(plot2, use_container_width=True)
-    st.text(f'Total Commission Paid: {round(commSum, 4)} in {data2["currencyPairDetails.base"][1]}')
+    st.text(f'Total Commission Paid: {round(commSum, 2)} in {data2["currencyPairDetails.base"][1]}')
 
 else:
     st.text("JSON not uploaded")
