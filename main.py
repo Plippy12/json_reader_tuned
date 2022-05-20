@@ -265,8 +265,8 @@ if uploaded_file is not None:
         text,
         rules
     ).properties(
-        width=600,
-        height=400
+        width= 1000,
+        height= 600
     )
 
     plot2 = alt.vconcat(plot, bars, trades)
