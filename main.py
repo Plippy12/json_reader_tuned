@@ -269,7 +269,12 @@ if uploaded_file is not None:
 
     plot2 = alt.vconcat(plot, bars, trades)
 
-    st.altair_chart(plot2, use_container_width=True)
+    st.subheader(f'This chart shows you the Accumulated % of {startAlloc[0]} {data2["currencyPairDetails.quote"][1]}')
+    st.altair_chart(plot, use_container_width=True)
+    st.subheader(f'This chart shows you the monthly gains of {startAlloc[0]} {data2["currencyPairDetails.quote"][1]}')
+    st.altair_chart(bars, use_container_width=True)
+    st.subheader('This chart shows you the success rate over time')
+    st.altair_chart(trades, use_container_width=True)
     st.text(f'Total Commission Paid: {round(commSum, 2)} in {data2["currencyPairDetails.settleCurrency"][1]}')
 
 else:
