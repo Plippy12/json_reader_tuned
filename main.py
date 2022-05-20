@@ -187,7 +187,7 @@ if uploaded_file is not None:
         line={'color': 'yellow'},
         opacity=0.5
         ).encode(
-        x=alt.X('date(filledTime):T', scale=alt.Scale(nice=False),
+        x=alt.X('month(filledTime):T', scale=alt.Scale(nice=False),
                 axis=alt.Axis(formatType="timeUnit", format="%B of %Y", title='Date',
                               labelAngle=-70,
                               labelSeparation=3,
