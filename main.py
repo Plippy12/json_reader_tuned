@@ -35,10 +35,10 @@ if uploaded_file is not None:
     isSell = ['Sell']
     closeLong = ['CloseLong']
     closeShort = ['CloseShort']
-    strFilt = ['Sell', 'CloseLong', 'CloseShort']
-    buyFilt = ['Buy']
-    filtered = data1[data1['side'].isin(strFilt)]
-    filteredCommBuy = data1[data1['side'].isin(buyFilt)]
+    str_filter = ['Sell', 'CloseLong', 'CloseShort']
+    buy_filter = ['Buy']
+    filtered = data1[data1['side'].isin(str_filter)]
+
     data1['adjComm'] = adjustedCommBuy = np.where(data1['side'] == 'Buy',
                                                   data1['commissionPaid'] * data1['filledPrice'],
                                                   data1['commissionPaid'])
@@ -70,25 +70,25 @@ if uploaded_file is not None:
 
     result = merged.groupby([merged['filledTime'].dt.year, merged['filledTimeM'].dt.month]).agg({'profit': sum})
 
-    def get_cumBal(startAlloc, profit):
+    def get_cum_bal(start_alloc, profit):
         global diff
-        if diff == startAlloc:
-            diff = startAlloc + profit
+        if diff == start_alloc:
+            diff = start_alloc + profit
         else:
             diff += profit
 
         return diff
 
 
-    merged["cumBal"] = merged.apply(lambda x: get_cumBal(x['startAlloc'], x['profit']), axis=1)
+    merged["cumBal"] = merged.apply(lambda x: get_cum_bal(x['startAlloc'], x['profit']), axis=1)
 
 
-    def get_profit(cumBal, startAlloc):
-        inc = cumBal - startAlloc
-        prof = inc / startAlloc
+    def get_profit(cum_bal, start_alloc):
+        inc = cum_bal - start_alloc
+        prof = inc / start_alloc
         return prof
 
-    def get_proftrades(profit):
+    def get_prof_trades(profit):
         if float(profit) > 0:
             profit_check = 1
         else:
@@ -96,19 +96,19 @@ if uploaded_file is not None:
         return profit_check
 
 
-    merged['profitableTrades'] = merged.apply(lambda x: get_proftrades(x['profit']), axis=1)
+    merged['profitableTrades'] = merged.apply(lambda x: get_prof_trades(x['profit']), axis=1)
 
     merged["cumProf"] = merged.apply(lambda x: get_profit(x['cumBal'], x['startAlloc']), axis=1)
 
     merged['profitableTradesTot'] = merged['profitableTrades'].cumsum()
 
 
-    def get_proftradesTot(totalTrades, winningTrades):
-        tradesPerc = int(winningTrades) / int(totalTrades) * 100.0
-        return tradesPerc
+    def get_prof_trades_tot(total_trades, winning_trades):
+        trades_perc = int(winning_trades) / int(total_trades) * 100.0
+        return trades_perc
 
-    merged['profitableTradesRolSum'] = merged.apply(lambda x: get_proftradesTot(x['tradeNo']+1,
-                                                                                x['profitableTradesTot']),
+    merged['profitableTradesRolSum'] = merged.apply(lambda x: get_prof_trades_tot(x['tradeNo']+1,
+                                                                                  x['profitableTradesTot']),
                                                     axis=1)
 
     coin = 'na'
@@ -132,8 +132,6 @@ if uploaded_file is not None:
             startAlloc = data3[col1]
         else:
             startAlloc = 'na'
-
-
 
     merged['maxValPerc'] = merged['cumProf'].max()
     merged['minValPerc'] = merged['cumProf'].min()
@@ -199,7 +197,6 @@ if uploaded_file is not None:
         height=600
     )
 
-
     chart.properties().configure_axisY(
             titleAngle=0,
             titleY=-10,
@@ -225,8 +222,8 @@ if uploaded_file is not None:
                               labelOverlap=True)),
     ).properties(
         title=f'{titleData["name"][0]} - {titleData["type"][0]} - Trading {coinData["coinPair"][0]}',
-        width = 1000,
-        height = 600
+        width=1000,
+        height=600
     )
 
     selectors = alt.Chart(merged).mark_point().encode(
@@ -265,11 +262,9 @@ if uploaded_file is not None:
         text,
         rules
     ).properties(
-        width= 1000,
-        height= 600
+        width=1000,
+        height=600
     )
-
-    plot2 = alt.vconcat(plot, bars, trades)
 
     st.subheader(f'This chart shows you the Accumulated % of {startAlloc[0]} {data2["currencyPairDetails.quote"][1]}')
     st.altair_chart(plot, use_container_width=True)
