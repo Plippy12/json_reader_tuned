@@ -286,7 +286,9 @@ if uploaded_file is not None:
         width=1000,
         height=600
     )
-    finalBal = merged["cumBal"]
+    mergedRev = merged["cumBal"].reverse()
+
+    finalBal = mergedRev[0]
     st.subheader(f'This chart shows you the Accumulated % of {startAlloc[0]} {data2["currencyPairDetails.quote"][1]}')
     st.altair_chart(plot, use_container_width=True)
     st.subheader(f'This chart shows you the Accumulated Balance'
