@@ -226,6 +226,27 @@ if uploaded_file is not None:
         height=600
     )
 
+    chart1 = alt.Chart(merged).mark_line(
+        interpolate='basis',
+        line={'color': 'yellow'},
+        opacity=0.5
+        ).encode(
+        x=alt.X('filledTime:T', scale=alt.Scale(nice=False),
+                axis=alt.Axis(formatType="timeUnit", format="%B of %Y", title='Date',
+                              labelAngle=-70,
+                              labelSeparation=3,
+                              labelPadding=0,
+                              labelOverlap=True)),
+        y=alt.Y('cumBal', scale=alt.Scale(nice=False),
+                axis=alt.Axis(title=f'Accumulated Balance of {startAlloc[0]} {data2["currencyPairDetails.quote"][1]}',
+                              labelSeparation=3,
+                              labelPadding=0,
+                              labelOverlap=True)),
+    ).properties(
+        width=1000,
+        height=600
+    )
+
     selectors = alt.Chart(merged).mark_point().encode(
         x='filledTime:T',
         opacity=alt.value(0),
@@ -268,6 +289,9 @@ if uploaded_file is not None:
     finalBal = merged["cumBal"]
     st.subheader(f'This chart shows you the Accumulated % of {startAlloc[0]} {data2["currencyPairDetails.quote"][1]}')
     st.altair_chart(plot, use_container_width=True)
+    st.subheader(f'This chart shows you the Accumulated Balance'
+                 f' of {startAlloc[0]} {data2["currencyPairDetails.quote"][1]}')
+    st.altair_chart(chart1, use_container_width=True)
     st.subheader(f'This chart shows you the monthly gains of {startAlloc[0]} {data2["currencyPairDetails.quote"][1]}')
     st.altair_chart(bars, use_container_width=True)
     st.subheader('This chart shows you the success rate over time')
