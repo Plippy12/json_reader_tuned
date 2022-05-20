@@ -299,6 +299,7 @@ if uploaded_file is not None:
     st.text(f'Initial Allocation: {startAlloc[0]} {data2["currencyPairDetails.quote"][1]}')
     st.text(f'Final Balance: {round(finalBal, 2)} {data2["currencyPairDetails.quote"][1]}')
     st.text(f'Total Commission Paid: {round(commSum, 2)} in {data2["currencyPairDetails.settleCurrency"][1]}')
+    st.text(f'Total Number of Trade: {merged["tradeNo"].iloc[-1]}')
 
 else:
     st.text("JSON not uploaded")
