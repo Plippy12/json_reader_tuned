@@ -286,7 +286,7 @@ if uploaded_file is not None:
         width=1000,
         height=600
     )
-    mergedRev = merged["cumBal"].reverse()
+    mergedRev = list(merged["cumBal"]).reverse()
 
     finalBal = mergedRev[0]
     st.subheader(f'This chart shows you the Accumulated % of {startAlloc[0]} {data2["currencyPairDetails.quote"][1]}')
