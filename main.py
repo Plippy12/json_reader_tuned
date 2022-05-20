@@ -43,8 +43,6 @@ if uploaded_file is not None:
                                                   data1['commissionPaid'] * data1['filledPrice'],
                                                   data1['commissionPaid'])
 
-    print(data1['adjComm'])
-
     commSum = data1['adjComm'].sum(axis=0)
 
     data2.drop(data2.columns.difference(['tradeNo', 'profit', 'profitPercentage', 'accumulatedBalance',
@@ -286,10 +284,11 @@ if uploaded_file is not None:
         width=1000,
         height=600
     )
-    mergedRev = list(merged["cumBal"]).reverse()
 
-    finalBal = mergedRev
+    finalBal = merged['cumBal'].iloc[-1]
+
     print(finalBal)
+
     st.subheader(f'This chart shows you the Accumulated % of {startAlloc[0]} {data2["currencyPairDetails.quote"][1]}')
     st.altair_chart(plot, use_container_width=True)
     st.subheader(f'This chart shows you the Accumulated Balance'
@@ -299,8 +298,8 @@ if uploaded_file is not None:
     st.altair_chart(bars, use_container_width=True)
     st.subheader('This chart shows you the success rate over time')
     st.altair_chart(trades, use_container_width=True)
-    st.text(f'Initial Allocation: {startAlloc[0]}')
-    st.text(f'Final Balance: {finalBal}')
+    st.text(f'Initial Allocation: {startAlloc[0]} {data2["currencyPairDetails.quote"][1]}')
+    st.text(f'Final Balance: {round(finalBal, 2)} {data2["currencyPairDetails.quote"][1]}')
     st.text(f'Total Commission Paid: {round(commSum, 2)} in {data2["currencyPairDetails.settleCurrency"][1]}')
 
 else:
