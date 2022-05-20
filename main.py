@@ -197,7 +197,11 @@ if uploaded_file is not None:
                 axis=alt.Axis(title=f'Profitable Trades Percentage', labelSeparation=3,
                               labelPadding=0,
                               labelOverlap=True)),
+    ).properties(
+        width=1000,
+        height=600
     )
+
 
     chart = alt.Chart(merged).mark_line(
         interpolate='basis',
