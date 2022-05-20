@@ -49,13 +49,14 @@ if uploaded_file is not None:
 
     data2.drop(data2.columns.difference(['tradeNo', 'profit', 'profitPercentage', 'accumulatedBalance',
                                          'currencyPairDetails.quote', 'currencyPairDetails.base', 'compoundProfitPerc',
-                                         'strategyCompoundProfitPerc']), 1, inplace=True)
+                                         'strategyCompoundProfitPerc', 'currencyPairDetails.settleCurrency']),
+               1, inplace=True)
 
     merged = pd.merge(filtered, data2)
     merged.drop(merged.columns.difference(['side', 'tradeNo', 'filledTime', 'profit', 'profitPercentage',
                                            'accumulatedBalance',
                                            'compoundProfitPerc', 'strategyCompoundProfitPerc',
-                                           'currencyPairDetails.base',
+                                           'currencyPairDetails.base', 'currencyPairDetails.settleCurrency',
                                            'currencyPairDetails.quote', 'startAlloc', 'cumBal', 'cumProf']),
                 1, inplace=True)
 
@@ -271,7 +272,7 @@ if uploaded_file is not None:
     plot2 = alt.vconcat(plot, bars, trades)
 
     st.altair_chart(plot2, use_container_width=True)
-    st.text(f'Total Commission Paid: {round(commSum, 2)} in {data2["currencyPairDetails.base"][1]}')
+    st.text(f'Total Commission Paid: {round(commSum, 2)} in {data2["currencyPairDetails.settleCurrency"][1]}')
 
 else:
     st.text("JSON not uploaded")
