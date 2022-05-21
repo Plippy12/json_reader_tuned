@@ -69,7 +69,7 @@ if uploaded_file is not None:
     # merged.index = merged.index.map(lambda x: pd.to_datetime(str(x)))
     # result = merged.groupby([merged.index.year, merged.index.month]).sum()
 
-    result = merged.groupby([merged['filledTime'].dt.year, merged['filledTimeM'].dt.month]).sum() #.agg({'profit': sum})
+    result = merged.groupby([merged['filledTime'].dt.year, merged['filledTimeM'].dt.month]).agg({'profit': sum})
 
     def get_cum_bal(start_alloc, profit):
         global diff
