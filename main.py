@@ -352,7 +352,8 @@ if uploaded_file is not None:
                  f'{data2["currencyPairDetails.settleCurrency"][1]}')
     st.altair_chart(bars, use_container_width=True)
     st.subheader('This chart shows you the success rate over time')
-    number = st.number_input('Insert a number')
+    number = st.number_input('Insert a number', value=100)
+
     merged['Profitable_Trades_Avg'] = merged['profitableTrades'].rolling(window=number, min_periods=1).mean()
 
     st.altair_chart(trades, use_container_width=True)
