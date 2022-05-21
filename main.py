@@ -247,7 +247,7 @@ if uploaded_file is not None:
                               labelSeparation=3,
                               labelPadding=0,
                               labelOverlap=True)),
-        color='key:O'
+        color='key:Q'
     )
 
     chart.properties().configure_axisY(
