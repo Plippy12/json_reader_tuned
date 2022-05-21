@@ -364,8 +364,9 @@ if uploaded_file is not None:
     st.altair_chart(chart, use_container_width=True)
     st.subheader(f'This Chart shows you the Max Drawdown from an equity High')
     st.altair_chart(chart3, use_container_width=True)
-    check = coinData['exchange'][0] == 'BYBIT' or 'BINANCE_COIN_FUTURES' or 'HUOBI_COIN_SWAPS' or 'BITMEX'
 
+    check = coinData['exchange'][0] == 'BYBIT' or 'BINANCE_COIN_FUTURES' or 'HUOBI_COIN_SWAPS' or 'BITMEX'
+    print(check)
     if check:
         expander = st.expander(f'If using Coin Futures - Click here to see the '
                                f'{data2["currencyPairDetails.quote"][1]} Comparisons')
