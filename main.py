@@ -104,7 +104,6 @@ if uploaded_file is not None:
         return buy_hold
 
     merged["buy_hold"] = merged.apply(lambda x: get_buy_hold(x['filledPrice']), axis=1)
-    merged['cumBalCoinPerc'] = merged.apply(lambda x: get_coin_perc(x['cumProf'], x["buy_hold"]), axis=1)
 
     def get_profit(cum_bal, start_alloc):
         inc = cum_bal - start_alloc
@@ -124,6 +123,7 @@ if uploaded_file is not None:
 
     merged['profitableTradesTot'] = merged['profitableTrades'].cumsum()
 
+    merged['cumBalCoinPerc'] = merged.apply(lambda x: get_coin_perc(x['Cumulative_Profit'], x["buy_hold"]), axis=1)
 
     def get_prof_trades_tot(total_trades, winning_trades):
         trades_perc = int(winning_trades) / int(total_trades) * 100.0
