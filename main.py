@@ -166,9 +166,8 @@ if uploaded_file is not None:
         x=alt.X('monthYear:O', sort=alt.EncodingSortField(field="monthYear", op='count', order='ascending'),
                 scale=alt.Scale(nice=False),
                 axis=alt.Axis(formatType="timeUnit", title='Date')),
-        y=alt.Y('profit1', scale=alt.Scale(nice=False),
-                axis=alt.Axis(title=f'Accumulated % of {startAlloc[0]} '
-                                    f'{data2["currencyPairDetails.quote"][1]} Per Month', grid=True,
+        y=alt.Y('month(profit1)', scale=alt.Scale(nice=False),
+                axis=alt.Axis(title=f'Monthly Percentage', grid=True,
                               offset=0))
     ) # .properties(
     #     width=1000,
