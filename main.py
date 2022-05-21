@@ -34,7 +34,7 @@ if uploaded_file is not None:
 
     str_filter = ['Sell', 'CloseLong', 'CloseShort']
     buy_filter = ['Buy', 'Long', 'Short']
-    print(data1)
+
     filtered = data1[data1['side'].isin(str_filter)]
 
     data1['adjComm'] = np.where(data1['side'] == 'Buy',
