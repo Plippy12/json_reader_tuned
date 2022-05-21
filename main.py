@@ -114,8 +114,6 @@ if uploaded_file is not None:
 
     merged['profitableTrades'] = merged.apply(lambda x: get_prof_trades(x['profit']), axis=1)
 
-
-
     merged["Cumulative_Profit"] = merged.apply(lambda x: get_profit(x['cumBal'], x['startAlloc']), axis=1)
 
     merged['profitableTradesTot'] = merged['profitableTrades'].cumsum()
@@ -136,8 +134,8 @@ if uploaded_file is not None:
 
 
     def get_highest_pnl(profit):
-        equityHigh = profit.max()
-        return equityHigh
+        equity_high = max(profit)
+        return equity_high
 
     merged["Cumulative_Profit_Max"] = merged.apply(lambda x: get_highest_pnl(x['Cumulative_Profit']),
                                                    axis=1)
