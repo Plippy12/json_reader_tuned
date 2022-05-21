@@ -66,6 +66,7 @@ if uploaded_file is not None:
     merged['filledTime'] = pd.to_datetime(merged['filledTime'])
     merged['filledTimeM'] = pd.to_datetime(merged['filledTime'])
     merged['filledTimeD'] = pd.to_datetime(merged['filledTime'])
+    # merged['filledTimeD'] = merged['filledTimeD'].dt.month
 
 
     def get_cum_bal(start_alloc, profit):
@@ -90,6 +91,7 @@ if uploaded_file is not None:
     merged['cumBalCoin'] = merged.apply(lambda x: get_coin_bal(x['cumBal'], x['filledPrice']), axis=1)
 
     result = merged.groupby([merged['filledTime'].dt.year, merged['filledTimeM'].dt.month])['cumBal'].last()
+    merged['trade_duration'] = (merged['filledTime'] - merged.filledTime.shift(1)).dt.total_seconds() / 60 / 60
 
     start_price = merged['filledPrice'][0]
 
@@ -209,6 +211,20 @@ if uploaded_file is not None:
                 ),
         y=alt.Y('profit1', scale=alt.Scale(nice=False),
                 axis=alt.Axis(title=f'Monthly Percentage', grid=True, format='%',
+                              offset=0))
+    )
+
+    bars1 = alt.Chart(merged).mark_bar().encode(
+        x=alt.X('monthYear:O', sort=alt.EncodingSortField(field="monthYear", op='count', order='ascending'),
+                scale=alt.Scale(nice=False),
+                axis=alt.Axis(formatType="timeUnit", title='Date',
+                              labelAngle=-70,
+                              labelSeparation=3,
+                              labelPadding=0,
+                              labelOverlap=True)
+                ),
+        y=alt.Y('trade_duration', scale=alt.Scale(nice=False),
+                axis=alt.Axis(title=f'Average Time in Hours between Trade Close', grid=True,
                               offset=0))
     )
 
@@ -355,6 +371,7 @@ if uploaded_file is not None:
     #     rules
     # )
 
+
     finalBal = merged['cumBal'].iloc[-1]
 
     st.subheader(f'{titleData["name"][0]} - {titleData["type"][0]} - Trading {coinData["coinPair"][0]} '
@@ -383,6 +400,10 @@ if uploaded_file is not None:
     st.subheader(f'This chart shows you the monthly gains of {startAlloc[0]} '
                  f'{data2["currencyPairDetails.settleCurrency"][1]}')
     st.altair_chart(bars, use_container_width=True)
+
+    st.subheader(f'This Chart shows the time between trade closes in Hours')
+    st.altair_chart(bars1, use_container_width=True)
+
     st.subheader('This chart shows you the success rate over time')
 
     number = st.number_input('Length of the Moving Average to be used on the Profitable Trades Percentage', value=50)
