@@ -247,7 +247,7 @@ if uploaded_file is not None:
                               labelSeparation=3,
                               labelPadding=0,
                               labelOverlap=True)),
-        color=alt.Color('key', scale=alt.Scale(domain=domain, range=range_))  # color='key:N'
+        color='key:O'
     )
 
     chart.properties().configure_axisY(
