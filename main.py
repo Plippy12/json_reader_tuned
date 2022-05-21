@@ -334,7 +334,10 @@ if uploaded_file is not None:
     if coinData['exchange'][0] == ('BYBIT' or 'BINANCE_COIN_FUTURES' or 'HUOBI_COIN_SWAPS' or 'BITMEX'):
         expander = st.expander(f'If using Coin Futures - Click here to see the '
                                f'{data2["currencyPairDetails.quote"][1]} Calculations')
+        expander.subheader(f'This chart compares the Buy and Hold to the Strategy PnL '
+                           f'in {data2["currencyPairDetails.quote"]}')
         expander.altair_chart(chart2, use_container_width=True)
+
         # with st.expander(f'If using Coin Futures - Click here to see the '
         #                  f'{data2["currencyPairDetails.quote"][1]} Calculations'):
         #     st.altair_chart(chart2, use_container_width=True)
