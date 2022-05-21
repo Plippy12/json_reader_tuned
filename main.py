@@ -279,7 +279,7 @@ if uploaded_file is not None:
                               labelOverlap=True)),
         y=alt.Y('value:Q', scale=alt.Scale(nice=False),
                 axis=alt.Axis(title=f'Accumulated Balance of {startAlloc[0]} '
-                                    f'{data2["currencyPairDetails.settleCurrency"][1]}',
+                                    f'{data2["currencyPairDetails.settleCurrency"][1]}', format='%',
                               labelSeparation=3,
                               labelPadding=0,
                               labelOverlap=True)),
