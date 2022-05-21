@@ -139,8 +139,6 @@ if uploaded_file is not None:
                                                merged.loc[:, ["Cumulative_Profit"]].max(1),
                                                )
 
-    # merged.assign(Cumulative_Profit_Min=min_vals)
-
     merged["Cumulative_Profit_Max"] = merged.Cumulative_Profit.shift(fill_value=0).cummax()
     # merged["Cumulative_Profit_Max"] = merged.apply(lambda x: get_highest_pnl(x['Cumulative_Profit'].max()),
     #                                                axis=1)
@@ -243,7 +241,7 @@ if uploaded_file is not None:
         )
 
     chart = alt.Chart(merged).transform_fold(
-        ['buy_hold', 'Cumulative_Profit', "Cumulative_Profit_Max"]).mark_line(
+        ['buy_hold', 'Cumulative_Profit']).mark_line(
         interpolate='basis',
         line={'color': 'yellow'},
         opacity=0.5
