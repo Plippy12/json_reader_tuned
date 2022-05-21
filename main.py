@@ -329,7 +329,7 @@ if uploaded_file is not None:
                               labelSeparation=3,
                               labelPadding=0,
                               labelOverlap=True)),
-        color=alt.Color('redyellowgreen')
+        color='redyellowgreen:N'
     )
     #
     # selectors = alt.Chart(merged).mark_point().encode(
