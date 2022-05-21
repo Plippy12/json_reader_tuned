@@ -262,7 +262,8 @@ if uploaded_file is not None:
                               labelOverlap=True)),
     )
 
-    chart2 = alt.Chart(merged).mark_line(
+    chart2 = alt.Chart(merged).transform_fold(
+        ['buy_hold', 'cumBalCoinPerc']).mark_line(
         interpolate='basis',
         line={'color': 'yellow'},
         opacity=0.5
@@ -273,7 +274,7 @@ if uploaded_file is not None:
                               labelSeparation=3,
                               labelPadding=0,
                               labelOverlap=True)),
-        y=alt.Y('cumBalCoinPerc', scale=alt.Scale(nice=False),
+        y=alt.Y('value:Q', scale=alt.Scale(nice=False),
                 axis=alt.Axis(title=f'Accumulated Balance of {startAlloc[0]} '
                                     f'{data2["currencyPairDetails.settleCurrency"][1]}',
                               labelSeparation=3,
