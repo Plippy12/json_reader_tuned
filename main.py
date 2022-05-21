@@ -335,7 +335,7 @@ if uploaded_file is not None:
         expander = st.expander(f'If using Coin Futures - Click here to see the '
                                f'{data2["currencyPairDetails.quote"][1]} Calculations')
         expander.subheader(f'This chart compares the Buy and Hold to the Strategy PnL '
-                           f'in {data2["currencyPairDetails.quote"]}')
+                           f'in {data2["currencyPairDetails.quote"][1]}')
         expander.altair_chart(chart2, use_container_width=True)
 
         # with st.expander(f'If using Coin Futures - Click here to see the '
