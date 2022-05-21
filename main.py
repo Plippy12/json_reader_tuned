@@ -390,7 +390,7 @@ if uploaded_file is not None:
     st.altair_chart(chart1, use_container_width=True)
     st.subheader(f'This chart shows you the monthly gains of {startAlloc[0]} '
                  f'{data2["currencyPairDetails.settleCurrency"][1]}')
-    st.altair_chart(barChart, use_container_width=True)
+    st.altair_chart(bars, use_container_width=True)
     st.subheader('This chart shows you the success rate over time')
     number = st.number_input('Insert a number', value=50)
 
