@@ -166,7 +166,6 @@ if uploaded_file is not None:
     result['cumBalShift'] = result.cumBal.shift(1)
     result['cumBalShift'] = result['cumBalShift'].fillna(merged['startAlloc'])
 
-    print(result['cumBalShift'])
     result['profit1'] = (result['cumBal'] / result['cumBalShift']) / result['cumBalShift']
 
     # merged.to_csv('Trade-Data.csv')
