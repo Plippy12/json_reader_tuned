@@ -330,7 +330,7 @@ if uploaded_file is not None:
     st.subheader(f'This chart shows you the Accumulated % of {startAlloc[0]} '
                  f'{data2["currencyPairDetails.settleCurrency"][1]}')
     st.altair_chart(chart, use_container_width=True)
-    if coinData['exchange'][0] == ['BYBIT', 'BINANCE_COIN_FUTURES', 'HUOBI_COIN_SWAPS', 'BITMEX']:
+    if coinData['exchange'][0] == 'BYBIT' or 'BINANCE_COIN_FUTURES' or 'HUOBI_COIN_SWAPS' or 'BITMEX':
         expander = st.expander(f'If using Coin Futures - Click here to see the '
                                f'{data2["currencyPairDetails.quote"][1]} Calculations')
         expander.subheader(f'This chart compares the Buy and Hold to the Strategy PnL '
