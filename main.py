@@ -163,9 +163,12 @@ if uploaded_file is not None:
 
     result['monthYear'] = "01" + "-" + result["filledTimeM"].astype(str) + "-" + result["filledTime"].astype(str)
 
-    result['profit1'] = (result.cumBal / result.cumBal.shift(1)) / result.cumBal.shift(1)
-    # print(result.cumBal)
-    # print(result.cumBal.shift(1))
+    result['cumBalShift'] = result.cumBal.shift(1)
+    result['cumBalShift'] = result['cumBalShift'].fillna(merged['startAlloc'])
+
+    print(result['cumBalShift'])
+    result['profit1'] = (result['cumBal'] / result['cumBalShift']) / result['cumBalShift']
+
     # merged.to_csv('Trade-Data.csv')
     # result.to_csv('Monthly-Data.csv')
 
