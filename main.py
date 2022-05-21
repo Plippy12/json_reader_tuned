@@ -162,10 +162,6 @@ if uploaded_file is not None:
     result['cumBalShift'] = result['cumBalShift'].fillna(merged['startAlloc'])
 
     result['profit1'] = (result['cumBal'] / result['cumBalShift'] - 1.0)
-    # (result['cumBal'] / result['cumBalShift']) / result['cumBalShift']
-
-    # merged.to_csv('Trade-Data.csv')
-    # result.to_csv('Monthly-Data.csv')
 
     bars = alt.Chart(result).mark_bar().encode(
         x=alt.X('monthYear:O', sort=alt.EncodingSortField(field="monthYear", op='count', order='ascending'),
@@ -179,10 +175,7 @@ if uploaded_file is not None:
         y=alt.Y('profit1', scale=alt.Scale(nice=False),
                 axis=alt.Axis(title=f'Monthly Percentage', grid=True, format='%',
                               offset=0))
-    )  # .properties(
-    #     width=1000,
-    #     height=600
-    # )
+    )
 
     trades = alt.Chart(merged).mark_line(
         interpolate='basis',
@@ -199,10 +192,7 @@ if uploaded_file is not None:
                 axis=alt.Axis(title=f'Profitable Trades Percentage', labelSeparation=3,
                               labelPadding=0,
                               labelOverlap=True)),
-    )  # .properties(
-    #     width=1000,
-    #     height=600
-    # )
+    )
 
     chart.properties().configure_axisY(
             titleAngle=0,
@@ -227,9 +217,7 @@ if uploaded_file is not None:
                 axis=alt.Axis(labelSeparation=3, format='%',
                               labelPadding=0,
                               labelOverlap=True)),
-    )  # .properties(,
-    # height=600
-    # )
+    )
 
     chart1 = alt.Chart(merged).mark_line(
         interpolate='basis',
@@ -248,10 +236,7 @@ if uploaded_file is not None:
                               labelSeparation=3,
                               labelPadding=0,
                               labelOverlap=True)),
-    )  # .properties(
-    #     width=1000,
-    #     height=600
-    # )
+    )
 
     selectors = alt.Chart(merged).mark_point().encode(
         x='filledTime:T',
@@ -289,10 +274,7 @@ if uploaded_file is not None:
         points,
         text,
         rules
-    )  # .properties(
-    #     width=1000,
-    #     height=600
-    # )
+    )
 
     finalBal = merged['cumBal'].iloc[-1]
 
