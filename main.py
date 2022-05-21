@@ -290,7 +290,7 @@ if uploaded_file is not None:
                 axis=alt.Axis(labelSeparation=3, format='%',
                               labelPadding=0,
                               labelOverlap=True)),
-        color='key:N'
+        color='redyellowgreen:N'
     )
 
     chart1 = alt.Chart(merged).mark_line(
