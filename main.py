@@ -365,8 +365,11 @@ if uploaded_file is not None:
     st.subheader(f'This Chart shows you the Max Drawdown from an equity High')
     st.altair_chart(chart3, use_container_width=True)
 
-    check = coinData['exchange'][0] == 'BYBIT' or 'BINANCE_COIN_FUTURES' or 'HUOBI_COIN_SWAPS' or 'BITMEX'
-    print(check)
+    check = (coinData['exchange'][0] == 'BYBIT' or
+             coinData['exchange'][0] == 'BINANCE_COIN_FUTURES' or
+             coinData['exchange'][0] == 'HUOBI_COIN_SWAPS' or
+             coinData['exchange'][0] == 'BITMEX')
+
     if check:
         expander = st.expander(f'If using Coin Futures - Click here to see the '
                                f'{data2["currencyPairDetails.quote"][1]} Comparisons')
@@ -391,7 +394,6 @@ if uploaded_file is not None:
     st.text(f'Final Balance: {round(finalBal, 2)} {data2["currencyPairDetails.settleCurrency"][1]}')
     st.text(f'Total Commission Paid: {round(commSum, 2)} in {data2["currencyPairDetails.settleCurrency"][1]}')
     st.text(f'Total Number of Trade: {merged["tradeNo"].iloc[-1]}')
-
 
 else:
     st.text("JSON not uploaded")
