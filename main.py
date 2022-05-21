@@ -228,7 +228,8 @@ if uploaded_file is not None:
                               labelPadding=0,
                               labelOverlap=True)),
     ).properties(
-        title=f'{titleData["name"][0]} - {titleData["type"][0]} - Trading {coinData["coinPair"][0]}',
+        title=f'{titleData["name"][0]} - {titleData["type"][0]} - Trading {coinData["coinPair"][0]} '
+              f'on {coinData["exchange"]}',
         # width=1000,
         # height=600
     )
@@ -245,7 +246,8 @@ if uploaded_file is not None:
                               labelPadding=0,
                               labelOverlap=True)),
         y=alt.Y('cumBal', scale=alt.Scale(nice=False),
-                axis=alt.Axis(title=f'Accumulated Balance of {startAlloc[0]} {data2["currencyPairDetails.quote"][1]}',
+                axis=alt.Axis(title=f'Accumulated Balance of {startAlloc[0]} '
+                                    f'{data2["currencyPairDetails.settleCurrency"][1]}',
                               labelSeparation=3,
                               labelPadding=0,
                               labelOverlap=True)),
