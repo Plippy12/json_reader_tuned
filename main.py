@@ -114,9 +114,9 @@ if uploaded_file is not None:
         else:
             profit_check = 0
         return profit_check
-
+    number = 100
     merged['profitableTrades'] = merged.apply(lambda x: get_prof_trades(x['profit']), axis=1)
-    merged['Profitable_Trades_Avg'] = merged['profitableTrades'].rolling(window=100, min_periods=1).mean()
+    merged['Profitable_Trades_Avg'] = merged['profitableTrades'].rolling(window=number, min_periods=1).mean()
 
     merged["Cumulative_Profit"] = merged.apply(lambda x: get_profit(x['cumBal'], x['startAlloc']), axis=1)
 
@@ -354,6 +354,7 @@ if uploaded_file is not None:
                  f'{data2["currencyPairDetails.settleCurrency"][1]}')
     st.altair_chart(bars, use_container_width=True)
     st.subheader('This chart shows you the success rate over time')
+    number = st.number_input('Window to cast the Average over? Default = 100')
     st.altair_chart(trades, use_container_width=True)
     st.text(f'Initial Allocation: {startAlloc[0]} {data2["currencyPairDetails.settleCurrency"][1]}')
     st.text(f'Final Balance: {round(finalBal, 2)} {data2["currencyPairDetails.settleCurrency"][1]}')
