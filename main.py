@@ -134,7 +134,7 @@ if uploaded_file is not None:
 
     merged["Cumulative_Profit_Max"] = merged.Cumulative_Profit.shift(fill_value=0).cummax()
 
-    merged["Cumulative_Profit_Min"] = np.where((merged["Cumulative_Profit_Max"] != merged["Cumulative_Profit_Max"][1]),
+    merged["Cumulative_Profit_Min"] = np.where((merged['Cumulative_Profit'] != merged['Cumulative_Profit'][1]),
                         merged.loc[:, ["Cumulative_Profit"]].min(1),
                         merged.loc[:, ["Cumulative_Profit_Max"]].max(1),
                         )
