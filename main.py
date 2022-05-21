@@ -85,9 +85,12 @@ if uploaded_file is not None:
         global cum_bal_coin
         cum_bal_coin = cum_bal * filled_price
         return cum_bal_coin
+
+
     def get_coin_perc(profit, buy_hold):
         coin_perc = buy_hold * (1.0 + profit)
         return coin_perc
+
 
     merged['cumBalCoin'] = merged.apply(lambda x: get_coin_bal(x['cumBal'], x['filledPrice']), axis=1)
 
@@ -101,7 +104,7 @@ if uploaded_file is not None:
         return buy_hold
 
     merged["buy_hold"] = merged.apply(lambda x: get_buy_hold(x['filledPrice']), axis=1)
-    merged['cumBalCoinPerc'] = merged.apply(lambda x: get_coin_perc(x['profit'], x["buy_hold"]), axis=1)
+    merged['cumBalCoinPerc'] = merged.apply(lambda x: get_coin_perc(x['cumProf'], x["buy_hold"]), axis=1)
 
     def get_profit(cum_bal, start_alloc):
         inc = cum_bal - start_alloc
