@@ -229,7 +229,7 @@ if uploaded_file is not None:
                               labelOverlap=True)),
     ).properties(
         title=f'{titleData["name"][0]} - {titleData["type"][0]} - Trading {coinData["coinPair"][0]} '
-              f'on {coinData["exchange"]}',
+              f'on {coinData["exchange"][0]}',
         # width=1000,
         # height=600
     )
@@ -284,7 +284,8 @@ if uploaded_file is not None:
     plot = alt.layer(
         chart.mark_line(color='blue').encode(
             y=alt.Y('cumProf', scale=alt.Scale(nice=False),
-                    axis=alt.Axis(title=f'Accumulated % of {startAlloc[0]} {data2["currencyPairDetails.quote"][1]}',
+                    axis=alt.Axis(title=f'Accumulated % of {startAlloc[0]} '
+                                        f'{data2["currencyPairDetails.settleCurrency"][1]}',
                                   grid=True, format='%',
                                   offset=0))),
         selectors,
@@ -298,17 +299,19 @@ if uploaded_file is not None:
 
     finalBal = merged['cumBal'].iloc[-1]
 
-    st.subheader(f'This chart shows you the Accumulated % of {startAlloc[0]} {data2["currencyPairDetails.quote"][1]}')
+    st.subheader(f'This chart shows you the Accumulated % of {startAlloc[0]} '
+                 f'{data2["currencyPairDetails.settleCurrency"][1]}')
     st.altair_chart(plot, use_container_width=True)
     st.subheader(f'This chart shows you the Accumulated Balance'
-                 f' of {startAlloc[0]} {data2["currencyPairDetails.quote"][1]}')
+                 f' of {startAlloc[0]} {data2["currencyPairDetails.settleCurrency"][1]}')
     st.altair_chart(chart1, use_container_width=True)
-    st.subheader(f'This chart shows you the monthly gains of {startAlloc[0]} {data2["currencyPairDetails.quote"][1]}')
+    st.subheader(f'This chart shows you the monthly gains of {startAlloc[0]} '
+                 f'{data2["currencyPairDetails.settleCurrency"][1]}')
     st.altair_chart(bars, use_container_width=True)
     st.subheader('This chart shows you the success rate over time')
     st.altair_chart(trades, use_container_width=True)
-    st.text(f'Initial Allocation: {startAlloc[0]} {data2["currencyPairDetails.quote"][1]}')
-    st.text(f'Final Balance: {round(finalBal, 2)} {data2["currencyPairDetails.quote"][1]}')
+    st.text(f'Initial Allocation: {startAlloc[0]} {data2["currencyPairDetails.settleCurrency"][1]}')
+    st.text(f'Final Balance: {round(finalBal, 2)} {data2["currencyPairDetails.settleCurrency"][1]}')
     st.text(f'Total Commission Paid: {round(commSum, 2)} in {data2["currencyPairDetails.settleCurrency"][1]}')
     st.text(f'Total Number of Trade: {merged["tradeNo"].iloc[-1]}')
 
