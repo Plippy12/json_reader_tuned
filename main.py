@@ -170,7 +170,7 @@ if uploaded_file is not None:
                 scale=alt.Scale(nice=False),
                 axis=alt.Axis(formatType="timeUnit", title='Date')),
         y=alt.Y('profit1', scale=alt.Scale(nice=False),
-                axis=alt.Axis(title=f'Monthly Percentage', grid=True,
+                axis=alt.Axis(title=f'Monthly Percentage', grid=True, format='%',
                               offset=0))
     ) # .properties(
     #     width=1000,
