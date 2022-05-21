@@ -175,7 +175,12 @@ if uploaded_file is not None:
     bars = alt.Chart(result).mark_bar().encode(
         x=alt.X('monthYear:O', sort=alt.EncodingSortField(field="monthYear", op='count', order='ascending'),
                 scale=alt.Scale(nice=False),
-                axis=alt.Axis(formatType="timeUnit", title='Date')),
+                axis=alt.Axis(formatType="timeUnit", title='Date',
+                              labelAngle = -70,
+                              labelSeparation = 3,
+                              labelPadding = 0,
+                              labelOverlap = True)
+                ),
         y=alt.Y('profit1', scale=alt.Scale(nice=False),
                 axis=alt.Axis(title=f'Monthly Percentage', grid=True, format='%',
                               offset=0))
