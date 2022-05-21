@@ -51,7 +51,8 @@ if uploaded_file is not None:
                1, inplace=True)
 
     merged = pd.merge(filtered, data2)
-    merged.drop(merged.columns.difference(['side', 'tradeNo', 'filledTime', 'profit', 'profitPercentage',
+    merged.drop(merged.columns.difference(['side', 'tradeNo', 'filledTime', 'filledPrice',
+                                           'profit', 'profitPercentage',
                                            'accumulatedBalance',
                                            'compoundProfitPerc', 'strategyCompoundProfitPerc',
                                            'currencyPairDetails.base', 'currencyPairDetails.settleCurrency',
@@ -81,6 +82,15 @@ if uploaded_file is not None:
 
     result = merged.groupby([merged['filledTime'].dt.year, merged['filledTimeM'].dt.month])['cumBal'].last()
 
+    start_price = merged['filledPrice'][0]
+
+    def get_buy_hold(current_price):
+        global start_price
+        buy_hold = current_price / start_price - 1
+        return buy_hold
+
+    merged["buy_hold"] = merged.apply(lambda x: get_buy_hold(x['filledPrice']), axis=1)
+
     def get_profit(cum_bal, start_alloc):
         inc = cum_bal - start_alloc
         prof = inc / start_alloc
@@ -95,7 +105,7 @@ if uploaded_file is not None:
 
     merged['profitableTrades'] = merged.apply(lambda x: get_prof_trades(x['profit']), axis=1)
 
-    merged["cumProf"] = merged.apply(lambda x: get_profit(x['cumBal'], x['startAlloc']), axis=1)
+    merged["Cumulative_Profit"] = merged.apply(lambda x: get_profit(x['cumBal'], x['startAlloc']), axis=1)
 
     merged['profitableTradesTot'] = merged['profitableTrades'].cumsum()
 
@@ -130,8 +140,8 @@ if uploaded_file is not None:
         else:
             startAlloc = 'na'
 
-    merged['maxValPerc'] = merged['cumProf'].max()
-    merged['minValPerc'] = merged['cumProf'].min()
+    merged['maxValPerc'] = merged['Cumulative_Profit'].max()
+    merged['minValPerc'] = merged['Cumulative_Profit'].min()
 
     y_range_max_1 = merged['maxValPerc'].max()
     y_range_min_1 = merged['minValPerc'].min()
@@ -202,7 +212,8 @@ if uploaded_file is not None:
             labelAlign='left'
         )
 
-    chart = alt.Chart(merged).mark_line(
+    chart = alt.Chart(merged).transform_fold(
+        ['buy_hold', 'Cumulative_Profit']).mark_line(
         interpolate='basis',
         line={'color': 'yellow'},
         opacity=0.5
@@ -213,10 +224,11 @@ if uploaded_file is not None:
                               labelSeparation=3,
                               labelPadding=0,
                               labelOverlap=True)),
-        y=alt.Y('cumProf', scale=alt.Scale(nice=False),
+        y=alt.Y('value:Q', scale=alt.Scale(nice=False),
                 axis=alt.Axis(labelSeparation=3, format='%',
                               labelPadding=0,
                               labelOverlap=True)),
+        color='key:N'
     )
 
     chart1 = alt.Chart(merged).mark_line(
@@ -237,44 +249,44 @@ if uploaded_file is not None:
                               labelPadding=0,
                               labelOverlap=True)),
     )
-
-    selectors = alt.Chart(merged).mark_point().encode(
-        x='filledTime:T',
-        opacity=alt.value(0),
-    ).add_selection(
-        nearest
-    )
-
-    # Draw points on the line, and highlight based on selection
-    points = chart.mark_point().encode(
-        opacity=alt.condition(nearest, alt.value(1), alt.value(0))
-    )
-
-    # Draw text labels near the points, and highlight based on selection
-    text = chart.mark_text(align='left', dx=5, dy=-5).encode(
-        text=alt.condition(nearest, 'cumProf', alt.value(' '))
-    )
-
-    # Draw a rule at the location of the selection
-    rules = alt.Chart(merged).mark_rule(color='gray').encode(
-        x='filledTime:T',
-    ).transform_filter(
-        nearest
-    )
-
-    # Put the five layers into a chart and bind the data
-    plot = alt.layer(
-        chart.mark_line(color='blue').encode(
-            y=alt.Y('cumProf', scale=alt.Scale(nice=False),
-                    axis=alt.Axis(title=f'Accumulated % of {startAlloc[0]} '
-                                        f'{data2["currencyPairDetails.settleCurrency"][1]}',
-                                  grid=True, format='%',
-                                  offset=0))),
-        selectors,
-        points,
-        text,
-        rules
-    )
+    #
+    # selectors = alt.Chart(merged).mark_point().encode(
+    #     x='filledTime:T',
+    #     opacity=alt.value(0),
+    # ).add_selection(
+    #     nearest
+    # )
+    #
+    # # Draw points on the line, and highlight based on selection
+    # points = chart.mark_point().encode(
+    #     opacity=alt.condition(nearest, alt.value(1), alt.value(0))
+    # )
+    #
+    # # Draw text labels near the points, and highlight based on selection
+    # text = chart.mark_text(align='left', dx=5, dy=-5).encode(
+    #     text=alt.condition(nearest, 'cumProf', alt.value(' '))
+    # )
+    #
+    # # Draw a rule at the location of the selection
+    # rules = alt.Chart(merged).mark_rule(color='gray').encode(
+    #     x='filledTime:T',
+    # ).transform_filter(
+    #     nearest
+    # )
+    #
+    # # Put the five layers into a chart and bind the data
+    # plot = alt.layer(
+    #     chart.mark_line(color='blue').encode(
+    #         y=alt.Y('cumProf', scale=alt.Scale(nice=False),
+    #                 axis=alt.Axis(title=f'Accumulated % of {startAlloc[0]} '
+    #                                     f'{data2["currencyPairDetails.settleCurrency"][1]}',
+    #                               grid=True, format='%',
+    #                               offset=0))),
+    #     selectors,
+    #     points,
+    #     text,
+    #     rules
+    # )
 
     finalBal = merged['cumBal'].iloc[-1]
 
@@ -282,7 +294,7 @@ if uploaded_file is not None:
                  f'on {coinData["exchange"][0]}')
     st.subheader(f'This chart shows you the Accumulated % of {startAlloc[0]} '
                  f'{data2["currencyPairDetails.settleCurrency"][1]}')
-    st.altair_chart(plot, use_container_width=True)
+    st.altair_chart(chart, use_container_width=True)
     st.subheader(f'This chart shows you the Accumulated Balance'
                  f' of {startAlloc[0]} {data2["currencyPairDetails.settleCurrency"][1]}')
     st.altair_chart(chart1, use_container_width=True)
