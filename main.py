@@ -79,6 +79,14 @@ if uploaded_file is not None:
 
 
     merged["cumBal"] = merged.apply(lambda x: get_cum_bal(x['startAlloc'], x['profit']), axis=1)
+    cum_bal_coin = 0
+
+    def get_coin_bal(cum_bal, filled_price):
+        global cum_bal_coin
+        cum_bal_coin = cum_bal * filled_price
+        return cum_bal_coin
+
+    merged['cumBalCoin'] = merged.apply(lambda x: get_coin_bal(x['cumBal'], x['filledPrice']), axis=1)
 
     result = merged.groupby([merged['filledTime'].dt.year, merged['filledTimeM'].dt.month])['cumBal'].last()
 
@@ -249,6 +257,25 @@ if uploaded_file is not None:
                               labelPadding=0,
                               labelOverlap=True)),
     )
+
+    chart2 = alt.Chart(merged).mark_line(
+        interpolate='basis',
+        line={'color': 'yellow'},
+        opacity=0.5
+        ).encode(
+        x=alt.X('filledTime:T', scale=alt.Scale(nice=False),
+                axis=alt.Axis(formatType="timeUnit", format="%B of %Y", title='Date',
+                              labelAngle=-70,
+                              labelSeparation=3,
+                              labelPadding=0,
+                              labelOverlap=True)),
+        y=alt.Y('cumBalCoin', scale=alt.Scale(nice=False),
+                axis=alt.Axis(title=f'Accumulated Balance of {startAlloc[0]} '
+                                    f'{data2["currencyPairDetails.settleCurrency"][1]}',
+                              labelSeparation=3,
+                              labelPadding=0,
+                              labelOverlap=True)),
+    )
     #
     # selectors = alt.Chart(merged).mark_point().encode(
     #     x='filledTime:T',
@@ -295,6 +322,10 @@ if uploaded_file is not None:
     st.subheader(f'This chart shows you the Accumulated % of {startAlloc[0]} '
                  f'{data2["currencyPairDetails.settleCurrency"][1]}')
     st.altair_chart(chart, use_container_width=True)
+    with st.expander(f'If using Coin Futures - Click here to see the '
+                     f'{data2["currencyPairDetails.quote"][1]} Calculations'):
+        st.altair_chart(chart2, use_container_width=True)
+
     st.subheader(f'This chart shows you the Accumulated Balance'
                  f' of {startAlloc[0]} {data2["currencyPairDetails.settleCurrency"][1]}')
     st.altair_chart(chart1, use_container_width=True)
@@ -307,6 +338,7 @@ if uploaded_file is not None:
     st.text(f'Final Balance: {round(finalBal, 2)} {data2["currencyPairDetails.settleCurrency"][1]}')
     st.text(f'Total Commission Paid: {round(commSum, 2)} in {data2["currencyPairDetails.settleCurrency"][1]}')
     st.text(f'Total Number of Trade: {merged["tradeNo"].iloc[-1]}')
+
 
 else:
     st.text("JSON not uploaded")
