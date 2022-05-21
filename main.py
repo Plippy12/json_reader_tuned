@@ -66,7 +66,8 @@ if uploaded_file is not None:
     merged['filledTimeM'] = pd.to_datetime(merged['filledTime'])
     merged['filledTimeD'] = pd.to_datetime(merged['filledTime'])
 
-    result = merged.groupby([merged['filledTime'].dt.year, merged['filledTimeM'].dt.month]).agg({'profit':sum})
+
+    result = merged.groupby([merged['filledTime'].dt.year, merged['filledTimeM'].dt.month]).sum() #.agg({'profit': sum})
 
     def get_cum_bal(start_alloc, profit):
         global diff
@@ -157,7 +158,7 @@ if uploaded_file is not None:
 
     result.reset_index(inplace=True)
     result['monthYear'] = "01" + "-" + result["filledTimeM"].astype(str) + "-" + result["filledTime"].astype(str)
-    result['profit1'] = result['profit'] * 100.0
+    result['profit1'] = result['profit']
 
     # merged.to_csv('Trade-Data.csv')
     # result.to_csv('Monthly-Data.csv')
