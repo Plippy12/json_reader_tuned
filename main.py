@@ -260,6 +260,7 @@ if uploaded_file is not None:
                               labelSeparation=3,
                               labelPadding=0,
                               labelOverlap=True)),
+        color='key:N'
     )
 
     chart2 = alt.Chart(merged).transform_fold(
