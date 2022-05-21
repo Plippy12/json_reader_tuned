@@ -259,8 +259,7 @@ if uploaded_file is not None:
                                     f'{data2["currencyPairDetails.settleCurrency"][1]}',
                               labelSeparation=3,
                               labelPadding=0,
-                              labelOverlap=True)),
-        color='key:N'
+                              labelOverlap=True))
     )
 
     chart2 = alt.Chart(merged).transform_fold(
@@ -281,6 +280,7 @@ if uploaded_file is not None:
                               labelSeparation=3,
                               labelPadding=0,
                               labelOverlap=True)),
+        color='key:N'
     )
     #
     # selectors = alt.Chart(merged).mark_point().encode(
