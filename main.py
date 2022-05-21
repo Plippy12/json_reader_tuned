@@ -24,8 +24,9 @@ if uploaded_file is not None:
     st.balloons()
     json_data = json.load(uploaded_file)
 
-    domain = ['setosa', 'versicolor', 'virginica']
-    range_ = ['red', 'green', 'blue']
+    domain = ['buy_hold', 'Cumulative_Profit', "Cumulative_Profit_Max",
+              'Cumulative_Profit_Min', 'Strategy_Percentage']
+    range_ = ['red', 'green', 'yellow', 'pink', 'orange']
 
     data1 = pd.json_normalize(json_data['trades'], record_path=['orders'], meta=['tradeNo'])
     data2 = pd.json_normalize(json_data, record_path=['trades'])
@@ -244,7 +245,7 @@ if uploaded_file is not None:
                               labelSeparation=3,
                               labelPadding=0,
                               labelOverlap=True)),
-        color='key:N'
+        color=alt.Color('key', scale=alt.Scale(domain=domain, range=range_))  # color='key:N'
     )
 
     chart.properties().configure_axisY(
