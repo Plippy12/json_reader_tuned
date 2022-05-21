@@ -212,6 +212,16 @@ if uploaded_file is not None:
                               offset=0))
     )
 
+    line = alt.Chart(result).mark_line(color='red').transform_window(
+        # The field to average
+        rolling_mean='profit1',
+        # The number of values before and after the current value to include.
+        frame=[-9, 0]
+    ).encode(
+        x='monthYear:O',
+        y='rolling_mean:Q'
+    )
+    barChart = (bars + line)
     trades = alt.Chart(merged).transform_fold(
         ['Profitable_Trades_Perc', 'Profitable_Trades_Avg']).mark_line(
         interpolate='basis',
@@ -380,7 +390,7 @@ if uploaded_file is not None:
     st.altair_chart(chart1, use_container_width=True)
     st.subheader(f'This chart shows you the monthly gains of {startAlloc[0]} '
                  f'{data2["currencyPairDetails.settleCurrency"][1]}')
-    st.altair_chart(bars, use_container_width=True)
+    st.altair_chart(barChart, use_container_width=True)
     st.subheader('This chart shows you the success rate over time')
     number = st.number_input('Insert a number', value=50)
 
