@@ -176,15 +176,15 @@ if uploaded_file is not None:
         x=alt.X('monthYear:O', sort=alt.EncodingSortField(field="monthYear", op='count', order='ascending'),
                 scale=alt.Scale(nice=False),
                 axis=alt.Axis(formatType="timeUnit", title='Date',
-                              labelAngle = -70,
-                              labelSeparation = 3,
-                              labelPadding = 0,
-                              labelOverlap = True)
+                              labelAngle=-70,
+                              labelSeparation=3,
+                              labelPadding=0,
+                              labelOverlap=True)
                 ),
         y=alt.Y('profit1', scale=alt.Scale(nice=False),
                 axis=alt.Axis(title=f'Monthly Percentage', grid=True, format='%',
                               offset=0))
-    ) # .properties(
+    )  # .properties(
     #     width=1000,
     #     height=600
     # )
@@ -204,7 +204,7 @@ if uploaded_file is not None:
                 axis=alt.Axis(title=f'Profitable Trades Percentage', labelSeparation=3,
                               labelPadding=0,
                               labelOverlap=True)),
-    ) # .properties(
+    )  # .properties(
     #     width=1000,
     #     height=600
     # )
@@ -232,12 +232,9 @@ if uploaded_file is not None:
                 axis=alt.Axis(labelSeparation=3, format='%',
                               labelPadding=0,
                               labelOverlap=True)),
-    ).properties(
-        title=f'{titleData["name"][0]} - {titleData["type"][0]} - Trading {coinData["coinPair"][0]} '
-              f'on {coinData["exchange"][0]}',
-        # width=1000,
-        # height=600
-    )
+    )  # .properties(,
+    # height=600
+    # )
 
     chart1 = alt.Chart(merged).mark_line(
         interpolate='basis',
@@ -256,7 +253,7 @@ if uploaded_file is not None:
                               labelSeparation=3,
                               labelPadding=0,
                               labelOverlap=True)),
-    ) # .properties(
+    )  # .properties(
     #     width=1000,
     #     height=600
     # )
@@ -297,7 +294,7 @@ if uploaded_file is not None:
         points,
         text,
         rules
-    ) # .properties(
+    )  # .properties(
     #     width=1000,
     #     height=600
     # )
@@ -306,6 +303,8 @@ if uploaded_file is not None:
 
     st.subheader(f'This chart shows you the Accumulated % of {startAlloc[0]} '
                  f'{data2["currencyPairDetails.settleCurrency"][1]}')
+    st.subheader(f'{titleData["name"][0]} - {titleData["type"][0]} - Trading {coinData["coinPair"][0]} '
+                 f'on {coinData["exchange"][0]}')
     st.altair_chart(plot, use_container_width=True)
     st.subheader(f'This chart shows you the Accumulated Balance'
                  f' of {startAlloc[0]} {data2["currencyPairDetails.settleCurrency"][1]}')
