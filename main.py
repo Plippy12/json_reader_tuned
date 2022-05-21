@@ -215,7 +215,7 @@ if uploaded_file is not None:
     )
 
     bars1 = alt.Chart(merged).mark_bar().encode(
-        x=alt.X('monthYear:O', sort=alt.EncodingSortField(field="monthYear", op='count', order='ascending'),
+        x=alt.X('tradeNo:O', sort=alt.EncodingSortField(field="monthYear", op='count', order='ascending'),
                 scale=alt.Scale(nice=False),
                 axis=alt.Axis(formatType="timeUnit", title='Date',
                               labelAngle=-70,
