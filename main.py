@@ -354,7 +354,6 @@ if uploaded_file is not None:
                  f'{data2["currencyPairDetails.settleCurrency"][1]}')
     st.altair_chart(bars, use_container_width=True)
     st.subheader('This chart shows you the success rate over time')
-    number = st.number_input('Window to cast the Average over? Default = 100')
     st.altair_chart(trades, use_container_width=True)
     st.text(f'Initial Allocation: {startAlloc[0]} {data2["currencyPairDetails.settleCurrency"][1]}')
     st.text(f'Final Balance: {round(finalBal, 2)} {data2["currencyPairDetails.settleCurrency"][1]}')
