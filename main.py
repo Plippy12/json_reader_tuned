@@ -116,9 +116,7 @@ if uploaded_file is not None:
         return profit_check
 
     merged['profitableTrades'] = merged.apply(lambda x: get_prof_trades(x['profit']), axis=1)
-    merged['profitableTradesRoll'] = merged['profitableTrades'].rolling(window=100, min_periods=1).mean()
-
-    print(merged['profitableTradesRoll'])
+    merged['Profitable_Trades_Avg'] = merged['profitableTrades'].rolling(window=100, min_periods=1).mean()
 
     merged["Cumulative_Profit"] = merged.apply(lambda x: get_profit(x['cumBal'], x['startAlloc']), axis=1)
 
@@ -134,7 +132,7 @@ if uploaded_file is not None:
         trades_perc = int(winning_trades) / int(total_trades) #   * 100.0
         return trades_perc
 
-    merged['profitableTradesRolSum'] = merged.apply(lambda x: get_prof_trades_tot(x['tradeNo']+1,
+    merged['Profitable_Trades_Perc'] = merged.apply(lambda x: get_prof_trades_tot(x['tradeNo']+1,
                                                                                   x['profitableTradesTot']),
                                                     axis=1)
 
@@ -208,7 +206,7 @@ if uploaded_file is not None:
     )
 
     trades = alt.Chart(merged).transform_fold(
-        ['profitableTradesRolSum', 'profitableTradesRoll']).mark_line(
+        ['Profitable_Trades_Perc', 'Profitable_Trades_Avg']).mark_line(
         interpolate='basis',
         line={'color': 'yellow'},
         opacity=0.5
