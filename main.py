@@ -132,21 +132,14 @@ if uploaded_file is not None:
                                                                                   x['profitableTradesTot']),
                                                     axis=1)
 
-
-    def get_highest_pnl(profit):
-        equity_high = profit
-        df["outcome"] = df.value.shift(fill_value=0).cummax()
-        return equity_high
-
-
     merged["Cumulative_Profit_Max"] = merged.Cumulative_Profit.shift(fill_value=0).cummax()
 
-    min_vals = np.where((merged["Cumulative_Profit_Max"] != merged["Cumulative_Profit_Max"][1]),
+    merged["Cumulative_Profit_Min"] = np.where((merged["Cumulative_Profit_Max"] != merged["Cumulative_Profit_Max"][1]),
                         merged.loc[:, ["Cumulative_Profit"]].min(1),
                         merged.loc[:, ["Cumulative_Profit_Max"]].max(1),
                         )
 
-    merged.assign(Cumulative_Profit_Min=min_vals)
+    # merged.assign(Cumulative_Profit_Min=min_vals)
 
     merged["Cumulative_Profit_Max"] = merged.Cumulative_Profit.shift(fill_value=0).cummax()
     # merged["Cumulative_Profit_Max"] = merged.apply(lambda x: get_highest_pnl(x['Cumulative_Profit'].max()),
