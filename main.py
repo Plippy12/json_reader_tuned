@@ -34,12 +34,12 @@ if uploaded_file is not None:
 
     str_filter = ['Sell', 'CloseLong', 'CloseShort']
     buy_filter = ['Buy', 'Long', 'Short']
-    # trades = data1[]
+    print(data1)
     filtered = data1[data1['side'].isin(str_filter)]
 
     data1['adjComm'] = np.where(data1['side'] == 'Buy',
-                                                  data1['commissionPaid'] * data1['filledPrice'],
-                                                  data1['commissionPaid'])
+                                data1['commissionPaid'] * data1['filledPrice'],
+                                data1['commissionPaid'])
 
     commSum = data1['adjComm'].sum(axis=0)
 
@@ -66,6 +66,7 @@ if uploaded_file is not None:
     merged['filledTimeD'] = pd.to_datetime(merged['filledTime'])
     # merged['filledTimeD'] = merged['filledTimeD'].dt.month
 
+    merged['trade_duration'] = (merged['filledTime'] - merged.filledTime.shift(1)).dt.total_seconds() / 60 / 60
 
     def get_cum_bal(start_alloc, profit):
         global diff
@@ -89,7 +90,6 @@ if uploaded_file is not None:
     merged['cumBalCoin'] = merged.apply(lambda x: get_coin_bal(x['cumBal'], x['filledPrice']), axis=1)
 
     result = merged.groupby([merged['filledTime'].dt.year, merged['filledTimeM'].dt.month])['cumBal'].last()
-    merged['trade_duration'] = (merged['filledTime'] - merged.filledTime.shift(1)).dt.total_seconds() / 60 / 60
 
     start_price = merged['filledPrice'][0]
 
