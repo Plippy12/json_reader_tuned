@@ -66,10 +66,6 @@ if uploaded_file is not None:
     merged['filledTimeM'] = pd.to_datetime(merged['filledTime'])
     merged['filledTimeD'] = pd.to_datetime(merged['filledTime'])
 
-    # merged.index = merged.index.map(lambda x: pd.to_datetime(str(x)))
-    # result = merged.groupby([merged.index.year, merged.index.month]).sum()
-
-    # result = merged.groupby([merged['filledTime'].dt.year, merged['filledTimeM'].dt.month]).agg({'profit': max})
 
     def get_cum_bal(start_alloc, profit):
         global diff
@@ -96,7 +92,6 @@ if uploaded_file is not None:
         else:
             profit_check = 0
         return profit_check
-
 
     merged['profitableTrades'] = merged.apply(lambda x: get_prof_trades(x['profit']), axis=1)
 
