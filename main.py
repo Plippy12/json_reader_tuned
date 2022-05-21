@@ -134,6 +134,13 @@ if uploaded_file is not None:
                                                                                   x['profitableTradesTot']),
                                                     axis=1)
 
+
+    def get_highest_pnl(profit):
+        equityHigh = profit.max()
+
+    merged["Cumulative_Profit_Max"] = merged.apply(lambda x: get_highest_pnl(x['Cumulative_Profit_max']),
+                                                   axis=1)
+
     coin = 'na'
     for col in data2:
         if col == 'currencyPairDetails.quote':
@@ -232,7 +239,7 @@ if uploaded_file is not None:
         )
 
     chart = alt.Chart(merged).transform_fold(
-        ['buy_hold', 'Cumulative_Profit']).mark_line(
+        ['buy_hold', 'Cumulative_Profit', "Cumulative_Profit_Max"]).mark_line(
         interpolate='basis',
         line={'color': 'yellow'},
         opacity=0.5
