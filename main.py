@@ -139,7 +139,7 @@ if uploaded_file is not None:
         return equity_high
 
 
-    merged["Cumulative_Profit_Max"] = merged.Cumulative_Profit.shift(fill_value=0).cummax()
+    merged["Cumulative_Profit_Max"] = merged.Cumulative_Profit.shift(fill_value=0).max()
     # merged["Cumulative_Profit_Max"] = merged.apply(lambda x: get_highest_pnl(x['Cumulative_Profit'].max()),
     #                                                axis=1)
 
