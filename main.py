@@ -329,7 +329,7 @@ if uploaded_file is not None:
                               labelSeparation=3,
                               labelPadding=0,
                               labelOverlap=True)),
-        color=alt.Color('species', scale=alt.Scale(domain=domain, range=range_))
+        color=alt.Color('species', scale=alt.Scale(range=range_))
     )
     #
     # selectors = alt.Chart(merged).mark_point().encode(
