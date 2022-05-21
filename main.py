@@ -123,7 +123,7 @@ if uploaded_file is not None:
 
     merged['profitableTradesTot'] = merged['profitableTrades'].cumsum()
 
-    merged['cumBalCoinPerc'] = merged.apply(lambda x: get_coin_perc(x['Cumulative_Profit'], x["buy_hold"]), axis=1)
+    merged['Strategy_Percentage'] = merged.apply(lambda x: get_coin_perc(x['Cumulative_Profit'], x["buy_hold"]), axis=1)
 
     def get_prof_trades_tot(total_trades, winning_trades):
         trades_perc = int(winning_trades) / int(total_trades) * 100.0
@@ -266,7 +266,7 @@ if uploaded_file is not None:
     )
 
     chart2 = alt.Chart(merged).transform_fold(
-        ['buy_hold', 'cumBalCoinPerc']).mark_line(
+        ['buy_hold', 'Strategy_Percentage']).mark_line(
         interpolate='basis',
         line={'color': 'yellow'},
         opacity=0.5
