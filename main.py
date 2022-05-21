@@ -140,6 +140,15 @@ if uploaded_file is not None:
 
 
     merged["Cumulative_Profit_Max"] = merged.Cumulative_Profit.shift(fill_value=0).cummax()
+
+    min_vals = np.where((merged["Cumulative_Profit_Max"] != merged["Cumulative_Profit_Max"][1]),
+                        merged.loc[:, ["Cumulative_Profit"]].min(1),
+                        merged.loc[:, ["Cumulative_Profit_Max"]].max(1),
+                        )
+
+    merged.assign(Cumulative_Profit_Min=min_vals)
+
+    merged["Cumulative_Profit_Max"] = merged.Cumulative_Profit.shift(fill_value=0).cummax()
     # merged["Cumulative_Profit_Max"] = merged.apply(lambda x: get_highest_pnl(x['Cumulative_Profit'].max()),
     #                                                axis=1)
 
@@ -245,7 +254,26 @@ if uploaded_file is not None:
         interpolate='basis',
         line={'color': 'yellow'},
         opacity=0.5
-        ).encode(
+    ).encode(
+        x=alt.X('filledTime:T', scale=alt.Scale(nice=False),
+                axis=alt.Axis(formatType="timeUnit", format="%B of %Y", title='Date',
+                              labelAngle=-70,
+                              labelSeparation=3,
+                              labelPadding=0,
+                              labelOverlap=True)),
+        y=alt.Y('value:Q', scale=alt.Scale(nice=False),
+                axis=alt.Axis(labelSeparation=3, format='%',
+                              labelPadding=0,
+                              labelOverlap=True)),
+        color='key:N'
+    )
+
+    chart3 = alt.Chart(merged).transform_fold(
+        ["Cumulative_Profit_Max", 'Cumulative_Profit_Min']).mark_line(
+        interpolate='basis',
+        line={'color': 'yellow'},
+        opacity=0.5
+    ).encode(
         x=alt.X('filledTime:T', scale=alt.Scale(nice=False),
                 axis=alt.Axis(formatType="timeUnit", format="%B of %Y", title='Date',
                               labelAngle=-70,
