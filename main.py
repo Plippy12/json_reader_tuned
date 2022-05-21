@@ -135,10 +135,13 @@ if uploaded_file is not None:
 
     def get_highest_pnl(profit):
         equity_high = profit
+        df["outcome"] = df.value.shift(fill_value=0).cummax()
         return equity_high
 
-    merged["Cumulative_Profit_Max"] = merged.apply(lambda x: get_highest_pnl(x['Cumulative_Profit'].max()),
-                                                   axis=1)
+
+    merged["Cumulative_Profit_Max"] = merged.Cumulative_Profit.shift(fill_value=0).cummax()
+    # merged["Cumulative_Profit_Max"] = merged.apply(lambda x: get_highest_pnl(x['Cumulative_Profit'].max()),
+    #                                                axis=1)
 
     coin = 'na'
     for col in data2:
