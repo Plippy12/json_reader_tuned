@@ -32,14 +32,12 @@ if uploaded_file is not None:
 
     data3.drop(data3.columns.difference(['performance.startAllocation']), 1, inplace=True)
 
-    isSell = ['Sell']
-    closeLong = ['CloseLong']
-    closeShort = ['CloseShort']
     str_filter = ['Sell', 'CloseLong', 'CloseShort']
-    buy_filter = ['Buy']
+    buy_filter = ['Buy', 'Long', 'Short']
+    # trades = data1[]
     filtered = data1[data1['side'].isin(str_filter)]
 
-    data1['adjComm'] = adjustedCommBuy = np.where(data1['side'] == 'Buy',
+    data1['adjComm'] = np.where(data1['side'] == 'Buy',
                                                   data1['commissionPaid'] * data1['filledPrice'],
                                                   data1['commissionPaid'])
 
@@ -142,8 +140,6 @@ if uploaded_file is not None:
                                                )
 
     merged["Cumulative_Profit_Max"] = merged.Cumulative_Profit.shift(fill_value=0).cummax()
-    # merged["Cumulative_Profit_Max"] = merged.apply(lambda x: get_highest_pnl(x['Cumulative_Profit'].max()),
-    #                                                axis=1)
 
     coin = 'na'
     for col in data2:
@@ -370,7 +366,6 @@ if uploaded_file is not None:
     #     text,
     #     rules
     # )
-
 
     finalBal = merged['cumBal'].iloc[-1]
 
