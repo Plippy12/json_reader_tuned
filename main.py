@@ -131,7 +131,7 @@ if uploaded_file is not None:
     merged['Strategy_Percentage'] = merged.apply(lambda x: get_coin_perc(x["buy_hold"], x['Cumulative_Profit']), axis=1)
 
     def get_prof_trades_tot(total_trades, winning_trades):
-        trades_perc = int(winning_trades) / int(total_trades) * 100.0
+        trades_perc = int(winning_trades) / int(total_trades) #   * 100.0
         return trades_perc
 
     merged['profitableTradesRolSum'] = merged.apply(lambda x: get_prof_trades_tot(x['tradeNo']+1,
@@ -220,7 +220,8 @@ if uploaded_file is not None:
                               labelPadding=0,
                               labelOverlap=True)),
         y=alt.Y('value:Q',
-                axis=alt.Axis(title=f'Profitable Trades Percentage', labelSeparation=3,
+                axis=alt.Axis(title=f'Profitable Trades Percentage', format='%',
+                              labelSeparation=3,
                               labelPadding=0,
                               labelOverlap=True)),
         color='key:N'
