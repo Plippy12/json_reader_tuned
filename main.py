@@ -24,6 +24,9 @@ if uploaded_file is not None:
     st.balloons()
     json_data = json.load(uploaded_file)
 
+    domain = ['setosa', 'versicolor', 'virginica']
+    range_ = ['red', 'green', 'blue']
+
     data1 = pd.json_normalize(json_data['trades'], record_path=['orders'], meta=['tradeNo'])
     data2 = pd.json_normalize(json_data, record_path=['trades'])
     titleData = pd.json_normalize(json_data['strategy'])
@@ -326,7 +329,7 @@ if uploaded_file is not None:
                               labelSeparation=3,
                               labelPadding=0,
                               labelOverlap=True)),
-        color='key:N'
+        color=alt.Color('species', scale=alt.Scale(domain=domain, range=range_))
     )
     #
     # selectors = alt.Chart(merged).mark_point().encode(
