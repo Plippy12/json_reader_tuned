@@ -160,11 +160,12 @@ if uploaded_file is not None:
                              fields=['accumulatedBalance'], empty='none')
 
     result = result.reset_index()
-    print(result.keys())
+
     result['monthYear'] = "01" + "-" + result["filledTimeM"].astype(str) + "-" + result["filledTime"].astype(str)
 
-    result['profit1'] = ((result['cumBal'] / result['cumBal'][1]) / result['cumBal'][1])
-
+    result['profit1'] = (result.cumBal / result.cumBal.shift(1)) / result.cumBal.shift(1)
+    # print(result.cumBal)
+    # print(result.cumBal.shift(1))
     # merged.to_csv('Trade-Data.csv')
     # result.to_csv('Monthly-Data.csv')
 
