@@ -6,6 +6,7 @@ import numpy as np
 import altair_viewer
 from altair import pipe, limit_rows, to_values
 import streamlit as st
+from vega_datasets import data
 
 st.set_page_config(page_title='Dashboard', page_icon="🔌", layout='wide', initial_sidebar_state='expanded')
 
@@ -24,9 +25,10 @@ if uploaded_file is not None:
     st.balloons()
     json_data = json.load(uploaded_file)
 
-    domain = ['buy_hold', 'Cumulative_Profit', "Cumulative_Profit_Max",
-              'Cumulative_Profit_Min', 'Strategy_Percentage']
-    range_ = ['red', 'green', 'yellow', 'pink', 'orange']
+    domain = ['buy_hold', 'Cumulative_Profit']
+    domain1 = ["Cumulative_Profit_Max", 'Cumulative_Profit_Min']
+    domain2 = ['buy_hold', 'Strategy_Percentage']
+    range_ = ['green', 'yellow']
 
     data1 = pd.json_normalize(json_data['trades'], record_path=['orders'], meta=['tradeNo'])
     data2 = pd.json_normalize(json_data, record_path=['trades'])
