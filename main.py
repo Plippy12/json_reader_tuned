@@ -6,7 +6,6 @@ import numpy as np
 import altair_viewer
 from altair import pipe, limit_rows, to_values
 import streamlit as st
-from vega_datasets import data
 
 st.set_page_config(page_title='Dashboard', page_icon="🔌", layout='wide', initial_sidebar_state='expanded')
 
@@ -247,7 +246,8 @@ if uploaded_file is not None:
                               labelSeparation=3,
                               labelPadding=0,
                               labelOverlap=True)),
-        color=alt.Color('key:N', scale={"range":["yellow", "red"]})  # alt.Color('key', scale={"range": ["yellow", "orange"]})  # color='key:N'
+        color=alt.Color('key:N', scale={"range": ["yellow", "red"]})
+        # alt.Color('key', scale={"range": ["yellow", "orange"]})  # color='key:N'
     )
 
     chart.properties().configure_axisY(
@@ -274,7 +274,7 @@ if uploaded_file is not None:
                 axis=alt.Axis(labelSeparation=3, format='%',
                               labelPadding=0,
                               labelOverlap=True)),
-        color=alt.Color('key:N', scale={"range":["yellow", "red"]})
+        color=alt.Color('key:N', scale={"range": ["yellow", "red"]})
     )
 
     chart3 = alt.Chart(merged).transform_fold(
@@ -293,7 +293,7 @@ if uploaded_file is not None:
                 axis=alt.Axis(labelSeparation=3, format='%',
                               labelPadding=0,
                               labelOverlap=True)),
-        color=alt.Color('key:N', scale={"range":["yellow", "red"]})
+        color=alt.Color('key:N', scale={"range": ["yellow", "red"]})
     )
 
     chart1 = alt.Chart(merged).mark_line(
@@ -332,7 +332,7 @@ if uploaded_file is not None:
                               labelSeparation=3,
                               labelPadding=0,
                               labelOverlap=True)),
-        color=alt.Color('key:N', scale={"range":["yellow", "red"]})
+        color=alt.Color('key:N', scale={"range": ["yellow", "red"]})
     )
     #
     # selectors = alt.Chart(merged).mark_point().encode(
