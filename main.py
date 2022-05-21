@@ -212,16 +212,6 @@ if uploaded_file is not None:
                               offset=0))
     )
 
-    line = alt.Chart(result).mark_line(color='red').transform_window(
-        # The field to average
-        rolling_mean='profit1',
-        # The number of values before and after the current value to include.
-        frame=[-9, 0]
-    ).encode(
-        x='monthYear:O',
-        y='rolling_mean:Q'
-    )
-    barChart = (bars + line)
     trades = alt.Chart(merged).transform_fold(
         ['Profitable_Trades_Perc', 'Profitable_Trades_Avg']).mark_line(
         interpolate='basis',
