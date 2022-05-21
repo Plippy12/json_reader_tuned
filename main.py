@@ -125,7 +125,7 @@ if uploaded_file is not None:
     merged['Strategy_Percentage'] = merged.apply(lambda x: get_coin_perc(x["buy_hold"], x['Cumulative_Profit']), axis=1)
 
     def get_prof_trades_tot(total_trades, winning_trades):
-        trades_perc = int(winning_trades) / int(total_trades) #   * 100.0
+        trades_perc = int(winning_trades) / int(total_trades)  # * 100.0
         return trades_perc
 
     merged['Profitable_Trades_Perc'] = merged.apply(lambda x: get_prof_trades_tot(x['tradeNo']+1,
@@ -385,7 +385,7 @@ if uploaded_file is not None:
     st.altair_chart(bars, use_container_width=True)
     st.subheader('This chart shows you the success rate over time')
 
-    number = st.number_input('Insert a number', value=50)
+    number = st.number_input('Length of the Moving Average to be used on the Profitable Trades Percentage', value=50)
 
     merged['Profitable_Trades_Avg'] = merged['profitableTrades'].rolling(window=number, min_periods=1).mean()
 
