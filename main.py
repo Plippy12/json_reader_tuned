@@ -16,9 +16,9 @@ alt.data_transformers.enable('custom')
 alt.renderers.enable('altair_viewer')
 
 
-uploaded_file = st.file_uploader("Choose a file", type=['json'])
+# uploaded_file = st.file_uploader("Choose a file", type=['json'])
 
-# uploaded_file = open('json.json')
+uploaded_file = open('json.json')
 
 if uploaded_file is not None:
     st.balloons()
@@ -166,7 +166,8 @@ if uploaded_file is not None:
     result['cumBalShift'] = result.cumBal.shift(1)
     result['cumBalShift'] = result['cumBalShift'].fillna(merged['startAlloc'])
 
-    result['profit1'] = (result['cumBal'] / result['cumBalShift']) / result['cumBalShift']
+    result['profit1'] = (result['cumBal'] / result['cumBalShift'] - 1.0)
+    # (result['cumBal'] / result['cumBalShift']) / result['cumBalShift']
 
     # merged.to_csv('Trade-Data.csv')
     # result.to_csv('Monthly-Data.csv')
