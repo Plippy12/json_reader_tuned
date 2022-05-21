@@ -217,7 +217,7 @@ if uploaded_file is not None:
                               labelPadding=0,
                               labelOverlap=True)),
         y=alt.Y('cumProf', scale=alt.Scale(nice=False),
-                axis=alt.Axis(labelSeparation=3,
+                axis=alt.Axis(labelSeparation=3, format='%',
                               labelPadding=0,
                               labelOverlap=True)),
     ).properties(
