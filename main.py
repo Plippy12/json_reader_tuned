@@ -69,7 +69,7 @@ if uploaded_file is not None:
     # merged.index = merged.index.map(lambda x: pd.to_datetime(str(x)))
     # result = merged.groupby([merged.index.year, merged.index.month]).sum()
 
-    result = merged.groupby([merged['filledTime'].dt.year, merged['filledTimeM'].dt.month]).agg({'profit': sum})
+    # result = merged.groupby([merged['filledTime'].dt.year, merged['filledTimeM'].dt.month]).agg({'profit': max})
 
     def get_cum_bal(start_alloc, profit):
         global diff
@@ -83,6 +83,7 @@ if uploaded_file is not None:
 
     merged["cumBal"] = merged.apply(lambda x: get_cum_bal(x['startAlloc'], x['profit']), axis=1)
 
+    result = merged.groupby([merged['filledTime'].dt.year, merged['filledTimeM'].dt.month])['cumBal'].last()
 
     def get_profit(cum_bal, start_alloc):
         inc = cum_bal - start_alloc
@@ -158,9 +159,11 @@ if uploaded_file is not None:
     nearest1 = alt.selection(type='single', nearest=True, on='mouseover',
                              fields=['accumulatedBalance'], empty='none')
 
-    result.reset_index(inplace=True)
+    result = result.reset_index()
+    print(result.keys())
     result['monthYear'] = "01" + "-" + result["filledTimeM"].astype(str) + "-" + result["filledTime"].astype(str)
-    result['profit1'] = result['profit']
+
+    result['profit1'] = ((result['cumBal'] / result['cumBal'][1]) / result['cumBal'][1])
 
     # merged.to_csv('Trade-Data.csv')
     # result.to_csv('Monthly-Data.csv')
