@@ -246,7 +246,7 @@ if uploaded_file is not None:
 
     chart3 = alt.Chart(merged, title=f'This Chart shows you the Max Drawdown from an equity High'
                        ).transform_fold(
-        ["Cumulative_Profit_Max", 'Cumulative_Profit_Min']).mark_line(
+        ["Cumulative_Profit_Max", 'Cumulative_Profit_Min', 'worst_mdd']).mark_line(
         interpolate='basis',
         line={'color': 'yellow'},
         opacity=0.5
@@ -261,7 +261,7 @@ if uploaded_file is not None:
                 axis=alt.Axis(labelSeparation=3, format='%',
                               labelPadding=0,
                               labelOverlap=True)),
-        color=alt.Color('key:N', scale={"range": ["yellow", "red"]})
+        color=alt.Color('key:N', scale={"range": ["yellow", "red", "green"]})
     ).configure_view(
         strokeWidth=4,
         fill='#1c1c1e',
@@ -368,6 +368,7 @@ if uploaded_file is not None:
     finalBal = merged['cumBal'].iloc[-1]
     finalPerc = merged['Cumulative_Profit'].iloc[-1] * 100.0
     finalBnH = merged['buy_hold'].iloc[-1] * 100.0
+    finalMDD = merged['worst_mdd'].iloc[-1] * 100.0
 
     st.subheader(f'{titleData["name"][0]} - {titleData["type"][0]} - Trading {coinData["coinPair"][0]} '
                  f'on {coinData["exchange"][0]}')
@@ -385,6 +386,7 @@ if uploaded_file is not None:
         expander.altair_chart(chart2, use_container_width=True)
 
     st.altair_chart(chart3, use_container_width=True)
+    st.write(f'The worst Max Drawdown you incurred was -{finalMDD}%')
     st.altair_chart(chart1, use_container_width=True)
     st.altair_chart(bars, use_container_width=True)
     st.altair_chart(bars1, use_container_width=True)
