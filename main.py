@@ -6,7 +6,7 @@ import numpy as np
 import altair_viewer
 from altair import pipe, limit_rows, to_values
 import streamlit as st
-from functions import get_coin_bal, get_buy_hold, \
+from functions import get_cum_bal, get_coin_bal, get_buy_hold, \
     get_coin_perc, get_profit, get_prof_trades, get_prof_trades_tot
 
 st.set_page_config(page_title='Dashboard', page_icon="🔌", layout='wide', initial_sidebar_state='expanded')
@@ -73,17 +73,7 @@ if uploaded_file is not None:
 
     merged['trade_duration'] = (merged['filledTime'] - merged.filledTime.shift(1)).dt.total_seconds() / 60 / 60
 
-    diff = merged["startAlloc"][0]
-
-    def get_cum_bal(start_alloc, profit):
-        global diff
-        if start_alloc == diff:
-            diff = start_alloc + profit
-        else:
-            diff += profit
-
-        return diff
-
+    start_alloc = merged["startAlloc"][0]
     merged["cumBal"] = merged.apply(lambda x: get_cum_bal(x["startAlloc"], x['profit']), axis=1)
 
     cum_bal_coin = 0
