@@ -65,6 +65,10 @@ if uploaded_file is not None:
                 1, inplace=True)
 
     merged["startAlloc"] = pd.Series([data3['performance.startAllocation'][0] for x in range(len(merged.index))])
+    merged['cumuProf'] = pd.Series([merged["profit"] + merged.profit.shift(1) for x in range(len(merged.index))])
+    merged['cumuBal'] = pd.Series([merged['startAlloc'] + merged['cumuProf'] for x in range(len(merged.index))])
+
+    print(merged['cumuBal'])
 
     merged['filledTime'] = pd.to_datetime(merged['filledTime'])
     merged['filledTimeM'] = pd.to_datetime(merged['filledTime'])
