@@ -163,7 +163,7 @@ if uploaded_file is not None:
         labelAlign='right'
     )
 
-    bars1 = alt.Chart(merged, title=f'This Chart shows the time between trade closes in Hours'
+    bars1 = alt.Chart(merged, title='This Chart shows the time between trade closes in Hours'
                       ).mark_bar().encode(
         x=alt.X('tradeNo:O', sort=alt.EncodingSortField(field="monthYear", op='count', order='ascending'),
                 scale=alt.Scale(nice=False),
