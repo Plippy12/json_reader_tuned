@@ -172,7 +172,8 @@ if uploaded_file is not None:
                 ),
         y=alt.Y('profit1', scale=alt.Scale(nice=False),
                 axis=alt.Axis(title=f'Monthly Percentage', grid=True, format='%',
-                              offset=0))
+                              offset=0)),
+        color=alt.Color('key:N', scale={"range": ["yellow", "red"]})
     ).configure_view(
         strokeWidth=4,
         fill='#1c1c1e',
@@ -193,7 +194,8 @@ if uploaded_file is not None:
                 ),
         y=alt.Y('trade_duration', scale=alt.Scale(nice=False),
                 axis=alt.Axis(title=f'Average Time in Hours between Trade Close', grid=True,
-                              offset=0))
+                              offset=0)),
+        color=alt.Color('key:N', scale={"range": ["yellow", "red"]})
     ).configure_view(
         strokeWidth=4,
         fill='#1c1c1e',
@@ -302,7 +304,8 @@ if uploaded_file is not None:
                                     f'{data2["currencyPairDetails.settleCurrency"][1]}',
                               labelSeparation=3,
                               labelPadding=0,
-                              labelOverlap=True))
+                              labelOverlap=True)),
+        color=alt.Color('key:N', scale={"range": ["yellow", "red"]})
     ).configure_view(
         strokeWidth=4,
         fill='#1c1c1e',
