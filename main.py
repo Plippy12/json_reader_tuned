@@ -419,26 +419,17 @@ if uploaded_file is not None:
     if check:
         expander = st.expander(f'If using Coin Futures - Click here to see the '
                                f'{data2["currencyPairDetails.quote"][1]} Comparisons')
-        expander.subheader(f'This chart compares the Buy and Hold to the Strategy PnL '
-                           f'in {data2["currencyPairDetails.quote"][1]}')
         expander.altair_chart(chart2, use_container_width=True)
 
-    st.subheader(f'This Chart shows you the Max Drawdown from an equity High')
     st.altair_chart(chart3, use_container_width=True)
-    st.subheader(f'This chart shows you the Accumulated Balance'
-                 f' of {startAlloc[0]} {data2["currencyPairDetails.settleCurrency"][1]}')
+
     st.altair_chart(chart1, use_container_width=True)
-    st.subheader(f'This chart shows you the monthly gains of {startAlloc[0]} '
-                 f'{data2["currencyPairDetails.settleCurrency"][1]}')
+
     st.altair_chart(bars, use_container_width=True)
 
-    st.subheader(f'This Chart shows the time between trade closes in Hours')
     st.altair_chart(bars1, use_container_width=True)
 
-    st.subheader('This chart shows you the success rate over time')
-
     number = st.number_input('Length of the Moving Average to be used on the Profitable Trades Percentage', value=50)
-
     merged['Profitable_Trades_Avg'] = merged['profitableTrades'].rolling(window=number, min_periods=1).mean()
 
     st.altair_chart(trades, use_container_width=True)
