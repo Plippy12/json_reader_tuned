@@ -3,15 +3,8 @@
 # All functions to be placed within this file
 
 def get_cum_bal(start_alloc, profit):
-    diff = None
-    if diff is None:
-        diff = start_alloc
-    if start_alloc == diff:
-        diff = start_alloc + profit
-    else:
-        diff += profit
-
-    return diff
+    start_alloc += profit
+    return start_alloc
 
 
 def get_coin_bal(cum_bal_coin, cum_bal, filled_price):
