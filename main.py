@@ -7,7 +7,8 @@ import altair_viewer
 from altair import pipe, limit_rows, to_values
 import streamlit as st
 from functions import get_cum_bal, get_coin_bal, get_buy_hold, \
-    get_coin_perc, get_profit, get_prof_trades, get_prof_trades_tot
+    get_coin_perc, get_profit, get_prof_trades, get_prof_trades_tot, \
+    gen_chart
 
 st.set_page_config(page_title='Dashboard', page_icon="🔌", layout='wide', initial_sidebar_state='expanded')
 
@@ -204,33 +205,41 @@ if uploaded_file is not None:
         labelAlign='right'
     )
 
-    trades = alt.Chart(merged, title='This chart shows you the success rate over time'
-                       ).transform_fold(
-        ['Profitable_Trades_Perc', 'Profitable_Trades_Avg']).mark_line(
-        interpolate='basis',
-        line={'color': 'yellow'},
-        opacity=0.5
-        ).encode(
-        x=alt.X('filledTime:T', scale=alt.Scale(nice=False),
-                axis=alt.Axis(formatType="timeUnit", format="%B of %Y", title='Date',
-                              labelAngle=-70,
-                              labelSeparation=3,
-                              labelPadding=0,
-                              labelOverlap=True)),
-        y=alt.Y('value:Q',
-                axis=alt.Axis(title=f'Profitable Trades Percentage', format='%',
-                              labelSeparation=3,
-                              labelPadding=0,
-                              labelOverlap=True)),
-        color=alt.Color('key:N', scale={"range": ["yellow", "red"]})
-        # alt.Color('key', scale={"range": ["yellow", "orange"]})  # color='key:N'
-    ).configure_view(
-        strokeWidth=4,
-        fill='#1c1c1e',
-        stroke='#131313',
-    ).properties().configure_axisY(
-        labelAlign='right'
-    )
+    trade_title = 'This chart shows you the success rate over time'
+    trade_line1 = 'Profitable_Trades_Perc'
+    trade_line2 = 'Profitable_Trades_Avg'
+    trade_x_axis = 'filledTime:T'
+    trade_y_axis = 'value:Q'
+
+    trades = gen_chart(merged, trade_title, trade_line1, trade_line2, trade_x_axis, trade_y_axis)
+
+    # trades = alt.Chart(merged, title='This chart shows you the success rate over time'
+    #                    ).transform_fold(
+    #     ['Profitable_Trades_Perc', 'Profitable_Trades_Avg']).mark_line(
+    #     interpolate='basis',
+    #     line={'color': 'yellow'},
+    #     opacity=0.5
+    #     ).encode(
+    #     x=alt.X('filledTime:T', scale=alt.Scale(nice=False),
+    #             axis=alt.Axis(formatType="timeUnit", format="%B of %Y", title='Date',
+    #                           labelAngle=-70,
+    #                           labelSeparation=3,
+    #                           labelPadding=0,
+    #                           labelOverlap=True)),
+    #     y=alt.Y('value:Q',
+    #             axis=alt.Axis(title=f'Profitable Trades Percentage', format='%',
+    #                           labelSeparation=3,
+    #                           labelPadding=0,
+    #                           labelOverlap=True)),
+    #     color=alt.Color('key:N', scale={"range": ["yellow", "red"]})
+    #     # alt.Color('key', scale={"range": ["yellow", "orange"]})  # color='key:N'
+    # ).configure_view(
+    #     strokeWidth=4,
+    #     fill='#1c1c1e',
+    #     stroke='#131313',
+    # ).properties().configure_axisY(
+    #     labelAlign='right'
+    # )
 
     chart = alt.Chart(merged,
                       title=f'This chart shows you the Accumulated % of {startAlloc[0]} '
