@@ -7,8 +7,7 @@ import altair_viewer
 from altair import pipe, limit_rows, to_values
 import streamlit as st
 from functions import get_cum_bal, get_coin_bal, get_buy_hold, \
-    get_coin_perc, get_profit, get_prof_trades, get_prof_trades_tot, \
-    gen_chart
+    get_coin_perc, get_profit, get_prof_trades, get_prof_trades_tot
 
 st.set_page_config(page_title='Dashboard', page_icon="🔌", layout='wide', initial_sidebar_state='expanded')
 
