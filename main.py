@@ -265,7 +265,7 @@ if uploaded_file is not None:
                 axis=alt.Axis(labelSeparation=3, format='%',
                               labelPadding=0,
                               labelOverlap=True)),
-        color=alt.Color('key:N', scale={"range": ["yellow", "red", "green"]})
+        color=alt.Color('key:N', scale={"range": ["yellow", "red", "orange"]})
     ).configure_view(
         strokeWidth=4,
         fill='#1c1c1e',
