@@ -65,20 +65,15 @@ if uploaded_file is not None:
                 1, inplace=True)
 
     merged["startAlloc"] = pd.Series([data3['performance.startAllocation'][0] for x in range(len(merged.index))])
-    merged['cumuProf'] = pd.Series([merged["profit"] + merged.profit.shift(1) for x in range(len(merged.index))])
-    merged['cumuBal'] = pd.Series([merged['startAlloc'] + merged['cumuProf'] for x in range(len(merged.index))])
-
-    print(merged['cumuBal'])
-
+    merged['cumuProf'] = merged.profit.shift(fill_value=0).cumsum()
     merged['filledTime'] = pd.to_datetime(merged['filledTime'])
     merged['filledTimeM'] = pd.to_datetime(merged['filledTime'])
     merged['filledTimeD'] = pd.to_datetime(merged['filledTime'])
-    # merged['filledTimeD'] = merged['filledTimeD'].dt.month
 
     merged['trade_duration'] = (merged['filledTime'] - merged.filledTime.shift(1)).dt.total_seconds() / 60 / 60
 
     start_alloc = merged["startAlloc"][0]
-    merged["cumBal"] = merged.apply(lambda x: get_cum_bal(start_alloc, x['profit']), axis=1)
+    merged["cumBal"] = merged.apply(lambda x: get_cum_bal(x["startAlloc"], x['cumuProf']), axis=1)
 
     cum_bal_coin = 0
     merged['cumBalCoin'] = merged.apply(lambda x: get_coin_bal(cum_bal_coin, x['cumBal'], x['filledPrice']), axis=1)
