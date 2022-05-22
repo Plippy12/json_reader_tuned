@@ -24,11 +24,10 @@ uploaded_file = st.file_uploader("Choose a file", type=['json'])
 
 if uploaded_file is not None:
     with st.spinner('Wait for it...'):
-        time.sleep(5)
+        time.sleep(3)
         st.balloons()
     st.success('Ready to Analyse!!')
-    color1 = st.color_picker('Line 1 Color', '#FFFF00')
-    color2 = st.color_picker('Line 2 Color', '#ff0000')
+
     json_data = json.load(uploaded_file)
 
     domain = ['buy_hold', 'Cumulative_Profit']
@@ -86,8 +85,7 @@ if uploaded_file is not None:
     result = merged.groupby([merged['filledTime'].dt.year, merged['filledTimeM'].dt.month])['cumBal'].last()
 
     start_price = merged['filledPrice'][0]
-    # buy_hold = current_price / start_price - 1
-    merged["buy_hold_lambda"] = merged.apply(lambda x: start_price / x['filledPrice'] - 1, axis=1)
+    merged["buy_hold_lambda"] = merged.apply(lambda x: x['filledPrice'] / start_price - 1, axis=1)
     print(merged["buy_hold_lambda"])
 
     merged["buy_hold"] = merged.apply(lambda x: get_buy_hold(start_price, x['filledPrice']), axis=1)
@@ -182,7 +180,7 @@ if uploaded_file is not None:
         y=alt.Y('profit1', scale=alt.Scale(nice=False),
                 axis=alt.Axis(title=f'Monthly Percentage', grid=True, format='%',
                               offset=0)),
-        color=alt.Color('key:N', scale={"range": [color1, color2]})
+        color=alt.Color('key:N', scale={"range": ["yellow", "red"]})
     ).configure_view(
         strokeWidth=4,
         fill='#1c1c1e',
