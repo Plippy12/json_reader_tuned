@@ -73,7 +73,7 @@ if uploaded_file is not None:
 
     merged['trade_duration'] = (merged['filledTime'] - merged.filledTime.shift(1)).dt.total_seconds() / 60 / 60
 
-    merged["cumBal"] = merged.apply(lambda x: get_cum_bal(x["startAlloc"][0], x['startAlloc'], x['profit']), axis=1)
+    merged["cumBal"] = merged.apply(lambda x: get_cum_bal(x["startAlloc"], x['startAlloc'], x['profit']), axis=1)
     cum_bal_coin = 0
 
     merged['cumBalCoin'] = merged.apply(lambda x: get_coin_bal(x['cumBal'], x['filledPrice']), axis=1)

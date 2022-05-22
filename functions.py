@@ -4,7 +4,7 @@
 
 
 def get_cum_bal(diff, start_alloc, profit):
-    if diff == start_alloc:
+    if diff is None:
         diff = start_alloc + profit
     else:
         diff += profit
