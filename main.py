@@ -75,7 +75,6 @@ if uploaded_file is not None:
 
     diff = merged["startAlloc"][0]
 
-
     def get_cum_bal1(start_alloc, profit):
         global diff
         if diff == start_alloc:
