@@ -1,4 +1,6 @@
-'''All functions to be placed within this file'''
+
+
+# All functions to be placed within this file
 
 
 def get_cum_bal(start_alloc, profit):
