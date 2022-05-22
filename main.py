@@ -234,6 +234,19 @@ if uploaded_file is not None:
                               labelOverlap=True)),
         color=alt.Color('key:N', scale={"range": ["yellow", "red"]})
     )
+    chart.configure_header(
+        title=f'This chart shows you the Accumulated % of {startAlloc[0]} '
+              f'{data2["currencyPairDetails.settleCurrency"][1]}',
+        titleColor='green',
+        titleFontSize=14,
+        labelColor='red',
+        labelFontSize=14
+    )
+    chart.configure_view(
+        strokeWidth=4,
+        fill='#1c1c1e',
+        stroke='#131313',
+    )
 
     chart3 = alt.Chart(merged).transform_fold(
         ["Cumulative_Profit_Max", 'Cumulative_Profit_Min']).mark_line(
