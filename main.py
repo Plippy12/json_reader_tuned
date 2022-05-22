@@ -6,6 +6,7 @@ import numpy as np
 import altair_viewer
 from altair import pipe, limit_rows, to_values
 import streamlit as st
+import time
 from functions import get_cum_bal, get_coin_bal, get_buy_hold, \
     get_coin_perc, get_profit, get_prof_trades, get_prof_trades_tot
 
@@ -17,13 +18,15 @@ alt.data_transformers.register('custom', lambda data: pipe(data, limit_rows(max_
 alt.data_transformers.enable('custom')
 alt.renderers.enable('altair_viewer')
 
-
 uploaded_file = st.file_uploader("Choose a file", type=['json'])
 
 # uploaded_file = open('json.json')
 
 if uploaded_file is not None:
-    st.balloons()
+    with st.spinner('Wait for it...'):
+        time.sleep(5)
+    st.success('Ready to Analyse!!')
+
     json_data = json.load(uploaded_file)
 
     domain = ['buy_hold', 'Cumulative_Profit']
