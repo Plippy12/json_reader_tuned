@@ -97,7 +97,6 @@ if uploaded_file is not None:
                                        axis=1)
 
     merged['worst_mdd'] = merged.worst_mdd.shift(fill_value=0).cummin()
-    print(merged['worst_mdd'])
 
     coin = 'na'
     for col in data2:
