@@ -91,8 +91,8 @@ if uploaded_file is not None:
 
     merged["Cumulative_Profit_Max"] = merged.Cumulative_Profit.shift(fill_value=0).cummax()
 
-    merged['worst_mdd'] = merged.apply(lambda x: x['Cumulative_Profit_Max'] - x['Cumulative_Profit_Min'], axis=1)
-    merged['worst_mdd'] = merged.worst_mdd.shift(fill_value=0).cummax()
+    merged['worst_mdd'] = merged.apply(lambda x: (x['Cumulative_Profit_Max'] - x['Cumulative_Profit_Min']) * -1.0, axis=1)
+    merged['worst_mdd'] = merged.worst_mdd.shift(fill_value=0).cummin()
     print(merged['worst_mdd'])
 
     coin = 'na'
@@ -386,7 +386,7 @@ if uploaded_file is not None:
         expander.altair_chart(chart2, use_container_width=True)
 
     st.altair_chart(chart3, use_container_width=True)
-    st.write(f'The worst Max Drawdown you incurred was -{finalMDD}%')
+    st.write(f'The worst Max Drawdown you incurred was {round(finalMDD, 2)}%')
     st.altair_chart(chart1, use_container_width=True)
     st.altair_chart(bars, use_container_width=True)
     st.altair_chart(bars1, use_container_width=True)
