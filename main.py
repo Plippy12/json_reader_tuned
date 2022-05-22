@@ -25,6 +25,7 @@ uploaded_file = st.file_uploader("Choose a file", type=['json'])
 if uploaded_file is not None:
     with st.spinner('Wait for it...'):
         time.sleep(5)
+        st.balloons()
     st.success('Ready to Analyse!!')
 
     json_data = json.load(uploaded_file)
