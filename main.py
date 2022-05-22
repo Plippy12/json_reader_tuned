@@ -1,5 +1,4 @@
 import pandas as pd
-from altair.examples.ranged_dot_plot import chart
 import json
 import altair as alt
 import numpy as np
