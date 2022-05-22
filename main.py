@@ -27,7 +27,8 @@ if uploaded_file is not None:
         time.sleep(5)
         st.balloons()
     st.success('Ready to Analyse!!')
-
+    color1 = st.color_picker('Line 1 Color', '#FFFF00')
+    color2 = st.color_picker('Line 2 Color', '#ff0000')
     json_data = json.load(uploaded_file)
 
     domain = ['buy_hold', 'Cumulative_Profit']
@@ -177,7 +178,7 @@ if uploaded_file is not None:
         y=alt.Y('profit1', scale=alt.Scale(nice=False),
                 axis=alt.Axis(title=f'Monthly Percentage', grid=True, format='%',
                               offset=0)),
-        color=alt.Color('key:N', scale={"range": ["yellow", "red"]})
+        color=alt.Color('key:N', scale={"range": [color1, color2]})
     ).configure_view(
         strokeWidth=4,
         fill='#1c1c1e',
