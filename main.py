@@ -368,7 +368,7 @@ if uploaded_file is not None:
     st.subheader(f'{titleData["name"][0]} - {titleData["type"][0]} - Trading {coinData["coinPair"][0]} '
                  f'on {coinData["exchange"][0]}')
     st.altair_chart(chart, use_container_width=True)
-    st.write(f'PnL at end of backtest = {round(finalPerc, 2)}%')
+    st.write(f'Profit and Loss Percentage at end of backtest = {round(finalPerc, 2)}%')
     st.write(f'Buy and Hold Percentage at end of Backtest = {round(finalBnH, 2)}%')
     check = (coinData['exchange'][0] == 'BYBIT' or
              coinData['exchange'][0] == 'BINANCE_COIN_FUTURES' or
