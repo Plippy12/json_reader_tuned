@@ -405,7 +405,7 @@ if uploaded_file is not None:
     st.altair_chart(bars1, use_container_width=True)
 
     number = st.number_input('Length of the Moving Average to be used on the Profitable Trades Percentage', value=50)
-    if number == None or number == 0:
+    if number is None or number <= 0:
         st.text(f'Pick a length greater than 0 for the moving average to populate chart')
     else:
         merged['Profitable_Trades_Avg'] = merged['profitableTrades'].rolling(window=number, min_periods=1).mean()
