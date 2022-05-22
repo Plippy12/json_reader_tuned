@@ -92,8 +92,9 @@ if uploaded_file is not None:
     merged["Cumulative_Profit_Max"] = merged.Cumulative_Profit.shift(fill_value=0).cummax()
 
     merged['worst_mdd'] = merged.apply(lambda x: 0.0 if x['Cumulative_Profit_Max'] <=
-                                                        0.0 else (1.0 - (x["Cumulative_Profit_Min"] /
-                                                                        x['Cumulative_Profit_Max'])) * -1.0, axis=1)
+                                                        0.0 else (1.0 - ((1.0 + x["Cumulative_Profit_Min"]) /
+                                                                         (1.0 + x['Cumulative_Profit_Max']))) * -1.0,
+                                       axis=1)
 
     merged['worst_mdd'] = merged.worst_mdd.shift(fill_value=0).cummin()
     print(merged['worst_mdd'])
