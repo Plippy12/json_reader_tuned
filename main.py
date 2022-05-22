@@ -95,7 +95,7 @@ if uploaded_file is not None:
                                                         0 else ((x['Cumulative_Profit_Max'] - x["Cumulative_Profit_Min"]) /
                                                                 x['Cumulative_Profit_Max']) * -1.0, axis=1)
 
-    merged['worst_mdd'] = merged.worst_mdd.shift(fill_value=0).cummin()
+    merged['worst_mdd'] = merged.worst_mdd.shift(fill_value=0).cummax()
     print(merged['worst_mdd'])
 
     coin = 'na'
