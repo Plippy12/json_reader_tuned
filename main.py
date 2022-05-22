@@ -86,7 +86,15 @@ if uploaded_file is not None:
     start_price = merged['filledPrice'][0]
     merged["buy_hold"] = merged.apply(lambda x: x['filledPrice'] / start_price - 1, axis=1)
 
-    merged['profitableTrades'] = merged.apply(lambda x: get_prof_trades(x['profit']), axis=1)
+
+    def get_prof_trades(profit):
+        if float(profit) > 0:
+            profit_check = 1
+        else:
+            profit_check = 0
+        return profit_check
+
+    merged['profitableTrades'] = merged.apply(lambda x: 1.0 if float(x['profit']) > 0.0 else 0.0, axis=1)
 
     merged["Cumulative_Profit"] = merged.apply(lambda x: ((x['cumBal'] - x['startAlloc']) / x['startAlloc']), axis=1)
 
