@@ -159,7 +159,9 @@ if uploaded_file is not None:
 
     result['profit1'] = (result['cumBal'] / result['cumBalShift'] - 1.0)
 
-    bars = alt.Chart(result).mark_bar().encode(
+    bars = alt.Chart(result, title=f'This chart shows you the monthly gains of {startAlloc[0]} '
+                                   f'{data2["currencyPairDetails.settleCurrency"][1]}'
+                     ).mark_bar().encode(
         x=alt.X('monthYear:O', sort=alt.EncodingSortField(field="monthYear", op='count', order='ascending'),
                 scale=alt.Scale(nice=False),
                 axis=alt.Axis(formatType="timeUnit", title='Date',
@@ -366,10 +368,7 @@ if uploaded_file is not None:
 
     st.subheader(f'{titleData["name"][0]} - {titleData["type"][0]} - Trading {coinData["coinPair"][0]} '
                  f'on {coinData["exchange"][0]}')
-    st.subheader(f'This chart shows you the Accumulated % of {startAlloc[0]} '
-                 f'{data2["currencyPairDetails.settleCurrency"][1]}')
     st.altair_chart(chart, use_container_width=True)
-
     check = (coinData['exchange'][0] == 'BYBIT' or
              coinData['exchange'][0] == 'BINANCE_COIN_FUTURES' or
              coinData['exchange'][0] == 'HUOBI_COIN_SWAPS' or
