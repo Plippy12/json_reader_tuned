@@ -362,14 +362,14 @@ if uploaded_file is not None:
     # )
 
     finalBal = merged['cumBal'].iloc[-1]
-    finalPerc = merged['Cumulative_Profit'].iloc[-1]
-    finalBnH = merged['buy_hold'].iloc[-1]
+    finalPerc = merged['Cumulative_Profit'].iloc[-1] * 100.0
+    finalBnH = merged['buy_hold'].iloc[-1] * 100.0
 
     st.subheader(f'{titleData["name"][0]} - {titleData["type"][0]} - Trading {coinData["coinPair"][0]} '
                  f'on {coinData["exchange"][0]}')
     st.altair_chart(chart, use_container_width=True)
-    st.write(f'PnL at end of backtest = {finalPerc}')
-    st.write(f'Buy and Hold Percentage at end of Backtest = {finalBnH}')
+    st.write(f'PnL at end of backtest = {finalPerc}%')
+    st.write(f'Buy and Hold Percentage at end of Backtest = {finalBnH}%')
     check = (coinData['exchange'][0] == 'BYBIT' or
              coinData['exchange'][0] == 'BINANCE_COIN_FUTURES' or
              coinData['exchange'][0] == 'HUOBI_COIN_SWAPS' or
