@@ -3,26 +3,6 @@ from altair import pipe, limit_rows, to_values
 import altair_viewer
 # All functions to be placed within this file
 
-def get_cum_bal(start_alloc, profit):
-    start_alloc += profit
-    return start_alloc
-
-
-def get_coin_bal(cum_bal_coin, cum_bal, filled_price):
-    cum_bal_coin = cum_bal * filled_price
-    return cum_bal_coin
-
-
-def get_buy_hold(start_price, current_price):
-    buy_hold = current_price / start_price - 1
-    return buy_hold
-
-
-def get_profit(cum_bal, start_alloc):
-    inc = cum_bal - start_alloc
-    prof = inc / start_alloc
-    return prof
-
 
 def get_prof_trades(profit):
     if float(profit) > 0:

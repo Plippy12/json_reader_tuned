@@ -7,8 +7,7 @@ import altair_viewer
 from altair import pipe, limit_rows, to_values
 import streamlit as st
 import time
-from functions import get_cum_bal, get_coin_bal, get_buy_hold, \
-    get_coin_perc, get_profit, get_prof_trades, get_prof_trades_tot
+from functions import get_coin_bal, get_coin_perc, get_profit, get_prof_trades, get_prof_trades_tot
 
 st.set_page_config(page_title='Tuned JSON Viewer', page_icon="🔌", layout='wide', initial_sidebar_state='expanded')
 
@@ -77,10 +76,10 @@ if uploaded_file is not None:
     merged['trade_duration'] = (merged['filledTime'] - merged.filledTime.shift(1)).dt.total_seconds() / 60 / 60
 
     start_alloc = merged["startAlloc"][0]
-    merged["cumBal"] = merged.apply(lambda x: get_cum_bal(x["startAlloc"], x['cumuProf']), axis=1)
+    merged["cumBal"] = merged.apply(lambda x: x["startAlloc"] + x['cumuProf'], axis=1)
 
     cum_bal_coin = 0
-    merged['cumBalCoin'] = merged.apply(lambda x: get_coin_bal(cum_bal_coin, x['cumBal'], x['filledPrice']), axis=1)
+    merged['cumBalCoin'] = merged.apply(lambda x: x['cumBal'] * x['filledPrice'], axis=1)
 
     result = merged.groupby([merged['filledTime'].dt.year, merged['filledTimeM'].dt.month])['cumBal'].last()
 
@@ -89,7 +88,7 @@ if uploaded_file is not None:
 
     merged['profitableTrades'] = merged.apply(lambda x: get_prof_trades(x['profit']), axis=1)
 
-    merged["Cumulative_Profit"] = merged.apply(lambda x: get_profit(x['cumBal'], x['startAlloc']), axis=1)
+    merged["Cumulative_Profit"] = merged.apply(lambda x: ((x['cumBal'] - x['startAlloc']) / x['startAlloc']), axis=1)
 
     merged['profitableTradesTot'] = merged['profitableTrades'].cumsum()
 
