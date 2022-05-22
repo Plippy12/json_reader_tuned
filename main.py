@@ -93,10 +93,10 @@ if uploaded_file is not None:
 
     merged['worst_mdd'] = merged.apply(lambda x: 0.0 if x['Cumulative_Profit_Max'] <=
                                                         0.0 else (1.0 - ((1.0 + x["Cumulative_Profit_Min"]) /
-                                                                         (1.0 + x['Cumulative_Profit_Max']))) * -1.0,
+                                                                         (1.0 + x['Cumulative_Profit_Max']))),
                                        axis=1)
 
-    merged['worst_mdd'] = merged.worst_mdd.shift(fill_value=0).cummin()
+    merged['worst_mdd'] = merged.worst_mdd.shift(fill_value=0).cummax()
     print(merged['worst_mdd'])
 
     coin = 'na'
@@ -372,7 +372,7 @@ if uploaded_file is not None:
     finalBal = merged['cumBal'].iloc[-1]
     finalPerc = merged['Cumulative_Profit'].iloc[-1] * 100.0
     finalBnH = merged['buy_hold'].iloc[-1] * 100.0
-    finalMDD = merged['worst_mdd'].iloc[-1] * 100.0
+    finalMDD = (merged['worst_mdd'].iloc[-1] * 100.0) * -1.0
 
     st.subheader(f'{titleData["name"][0]} - {titleData["type"][0]} - Trading {coinData["coinPair"][0]} '
                  f'on {coinData["exchange"][0]}')
