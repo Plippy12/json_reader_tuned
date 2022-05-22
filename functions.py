@@ -3,8 +3,7 @@
 # All functions to be placed within this file
 
 
-def get_cum_bal(start_alloc, profit):
-    global diff
+def get_cum_bal(diff, start_alloc, profit):
     if diff == start_alloc:
         diff = start_alloc + profit
     else:
