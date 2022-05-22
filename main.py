@@ -271,7 +271,7 @@ if uploaded_file is not None:
         titleY=-10,
         titleX=-60,
         labelPadding=160,
-        labelAlign='left'
+        labelAlign='right'
     )
 
     chart3 = alt.Chart(merged, title=f'This Chart shows you the Max Drawdown from an equity High'
