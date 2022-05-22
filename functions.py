@@ -20,6 +20,7 @@ def get_coin_bal(cum_bal, filled_price):
 
 def get_buy_hold(current_price):
     global start_price
+    start_price = start_price
     buy_hold = current_price / start_price - 1
     return buy_hold
 
