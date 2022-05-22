@@ -71,17 +71,12 @@ if uploaded_file is not None:
     merged['filledTime'] = pd.to_datetime(merged['filledTime'])
     merged['filledTimeM'] = pd.to_datetime(merged['filledTime'])
     merged['filledTimeD'] = pd.to_datetime(merged['filledTime'])
-
     merged['trade_duration'] = (merged['filledTime'] - merged.filledTime.shift(1)).dt.total_seconds() / 60 / 60
-
     start_alloc = merged["startAlloc"][0]
     merged["cumBal"] = merged.apply(lambda x: x["startAlloc"] + x['cumuProf'], axis=1)
-
     cum_bal_coin = 0
     merged['cumBalCoin'] = merged.apply(lambda x: x['cumBal'] * x['filledPrice'], axis=1)
-
     result = merged.groupby([merged['filledTime'].dt.year, merged['filledTimeM'].dt.month])['cumBal'].last()
-
     start_price = merged['filledPrice'][0]
     merged["buy_hold"] = merged.apply(lambda x: x['filledPrice'] / start_price - 1, axis=1)
 
@@ -94,17 +89,11 @@ if uploaded_file is not None:
         return profit_check
 
     merged['profitableTrades'] = merged.apply(lambda x: 1.0 if float(x['profit']) > 0.0 else 0.0, axis=1)
-
     merged["Cumulative_Profit"] = merged.apply(lambda x: ((x['cumBal'] - x['startAlloc']) / x['startAlloc']), axis=1)
-
     merged['profitableTradesTot'] = merged['profitableTrades'].cumsum()
-
     merged['Strategy_Percentage'] = merged.apply(lambda x: x["buy_hold"] * (1.0 + x['Cumulative_Profit']), axis=1)
-
     merged['Profitable_Trades_Perc'] = merged.apply(lambda x: x['profitableTradesTot'] / x['tradeNo']+1, axis=1)
-
     merged["Cumulative_Profit_Max"] = merged.Cumulative_Profit.shift(fill_value=0).cummax()
-
     merged["Cumulative_Profit_Min"] = np.where((merged["Cumulative_Profit_Max"] < merged["Cumulative_Profit_Max"][1]),
                                                merged.loc[:, ["Cumulative_Profit"]].min(1),
                                                merged.loc[:, ["Cumulative_Profit"]].max(1),
@@ -136,19 +125,14 @@ if uploaded_file is not None:
 
     merged['maxValPerc'] = merged['Cumulative_Profit'].max()
     merged['minValPerc'] = merged['Cumulative_Profit'].min()
-
     y_range_max_1 = merged['maxValPerc'].max()
     y_range_min_1 = merged['minValPerc'].min()
-
     x_range_max_1 = merged['filledTime'].max()
     x_range_min_1 = merged['filledTime'].min()
-
     merged['maxValBal'] = merged["cumBal"].max()
     merged['minValBal'] = merged["cumBal"].min()
-
     y_range_max_2 = merged['maxValBal'].max()
     y_range_min_2 = merged['minValBal'].min()
-
     x_range_max_2 = merged['filledTime'].max()
     x_range_min_2 = merged['filledTime'].min()
 
@@ -161,10 +145,8 @@ if uploaded_file is not None:
     result = result.reset_index()
 
     result['monthYear'] = "01" + "-" + result["filledTimeM"].astype(str) + "-" + result["filledTime"].astype(str)
-
     result['cumBalShift'] = result.cumBal.shift(1)
     result['cumBalShift'] = result['cumBalShift'].fillna(merged['startAlloc'])
-
     result['profit1'] = (result['cumBal'] / result['cumBalShift'] - 1.0)
 
     bars = alt.Chart(result, title=f'This chart shows you the monthly gains of {startAlloc[0]} '
@@ -405,11 +387,8 @@ if uploaded_file is not None:
         expander.altair_chart(chart2, use_container_width=True)
 
     st.altair_chart(chart3, use_container_width=True)
-
     st.altair_chart(chart1, use_container_width=True)
-
     st.altair_chart(bars, use_container_width=True)
-
     st.altair_chart(bars1, use_container_width=True)
 
     number = st.number_input('Length of the Moving Average to be used on the Profitable Trades Percentage', value=50)
