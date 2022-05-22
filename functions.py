@@ -3,14 +3,6 @@
 # All functions to be placed within this file
 
 
-def get_cum_bal(diff, start_alloc, profit):
-    diff_check = diff
-    if start_alloc == diff_check:
-        diff = start_alloc + profit
-    else:
-        diff += profit
-
-    return diff
 
 
 def get_coin_bal(cum_bal_coin, cum_bal, filled_price):
