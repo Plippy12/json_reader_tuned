@@ -233,14 +233,12 @@ if uploaded_file is not None:
                               labelPadding=0,
                               labelOverlap=True)),
         color=alt.Color('key:N', scale={"range": ["yellow", "red"]})
-    )
-    chart.configure_header(
+    ).configure_header(
         titleColor='green',
         titleFontSize=14,
         labelColor='red',
         labelFontSize=14
-    )
-    chart.configure_view(
+    ).configure_view(
         strokeWidth=4,
         fill='#1c1c1e',
         stroke='#131313',
