@@ -6,6 +6,8 @@ import numpy as np
 import altair_viewer
 from altair import pipe, limit_rows, to_values
 import streamlit as st
+from functions import get_cum_bal, get_coin_bal, get_buy_hold, \
+    get_coin_perc, get_profit, get_prof_trades, get_prof_trades_tot
 
 st.set_page_config(page_title='Dashboard', page_icon="🔌", layout='wide', initial_sidebar_state='expanded')
 
@@ -73,24 +75,8 @@ if uploaded_file is not None:
 
     merged['trade_duration'] = (merged['filledTime'] - merged.filledTime.shift(1)).dt.total_seconds() / 60 / 60
 
-    def get_cum_bal(start_alloc, profit):
-        global diff
-        if diff == start_alloc:
-            diff = start_alloc + profit
-        else:
-            diff += profit
-
-        return diff
-
-
     merged["cumBal"] = merged.apply(lambda x: get_cum_bal(x['startAlloc'], x['profit']), axis=1)
     cum_bal_coin = 0
-
-    def get_coin_bal(cum_bal, filled_price):
-        global cum_bal_coin
-        cum_bal_coin = cum_bal * filled_price
-        return cum_bal_coin
-
 
     merged['cumBalCoin'] = merged.apply(lambda x: get_coin_bal(x['cumBal'], x['filledPrice']), axis=1)
 
@@ -98,24 +84,9 @@ if uploaded_file is not None:
 
     start_price = merged['filledPrice'][0]
 
-    def get_buy_hold(current_price):
-        global start_price
-        buy_hold = current_price / start_price - 1
-        return buy_hold
-
     merged["buy_hold"] = merged.apply(lambda x: get_buy_hold(x['filledPrice']), axis=1)
 
-    def get_profit(cum_bal, start_alloc):
-        inc = cum_bal - start_alloc
-        prof = inc / start_alloc
-        return prof
 
-    def get_prof_trades(profit):
-        if float(profit) > 0:
-            profit_check = 1
-        else:
-            profit_check = 0
-        return profit_check
 
     merged['profitableTrades'] = merged.apply(lambda x: get_prof_trades(x['profit']), axis=1)
 
@@ -123,15 +94,7 @@ if uploaded_file is not None:
 
     merged['profitableTradesTot'] = merged['profitableTrades'].cumsum()
 
-    def get_coin_perc(buy_hold, profit):
-        coin_perc = buy_hold * (1.0 + profit)
-        return coin_perc
-
     merged['Strategy_Percentage'] = merged.apply(lambda x: get_coin_perc(x["buy_hold"], x['Cumulative_Profit']), axis=1)
-
-    def get_prof_trades_tot(total_trades, winning_trades):
-        trades_perc = int(winning_trades) / int(total_trades)  # * 100.0
-        return trades_perc
 
     merged['Profitable_Trades_Perc'] = merged.apply(lambda x: get_prof_trades_tot(x['tradeNo']+1,
                                                                                   x['profitableTradesTot']),
