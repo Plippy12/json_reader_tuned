@@ -234,8 +234,6 @@ if uploaded_file is not None:
                               labelOverlap=True)),
         color=alt.Color('key:N', scale={"range": ["yellow", "red"]})
     ).configure_header(
-        title=f'This chart shows you the Accumulated % of {startAlloc[0]} '
-              f'{data2["currencyPairDetails.settleCurrency"][1]}',
         titleColor='green',
         titleFontSize=14,
         labelColor='red',
