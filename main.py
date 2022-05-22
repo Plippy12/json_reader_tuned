@@ -75,9 +75,15 @@ if uploaded_file is not None:
 
     diff1 = merged["startAlloc"][0]
 
-    def get_cum_bal1(start_alloc, profit):
-        start_alloc += profit
-        return start_alloc
+
+    def get_cum_bal1(diff, start_alloc, profit):
+        diff_check = diff
+        if start_alloc == diff_check:
+            diff = start_alloc + profit
+        else:
+            diff += profit
+
+        return diff
 
     merged["cumBal"] = merged.apply(lambda x: get_cum_bal1(x["startAlloc"], x['profit']), axis=1)
 
