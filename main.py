@@ -216,7 +216,10 @@ if uploaded_file is not None:
             labelAlign='left'
         )
 
-    chart = alt.Chart(merged).transform_fold(
+    chart = alt.Chart(merged,
+                      title=f'This chart shows you the Accumulated % of {startAlloc[0]} '
+                            f'{data2["currencyPairDetails.settleCurrency"][1]}',
+                      ).transform_fold(
         ['buy_hold', 'Cumulative_Profit']).mark_line(
         interpolate='basis',
         line={'color': 'yellow'},
