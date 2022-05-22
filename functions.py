@@ -12,8 +12,7 @@ def get_cum_bal(diff, start_alloc, profit):
     return diff
 
 
-def get_coin_bal(cum_bal, filled_price):
-    global cum_bal_coin
+def get_coin_bal(cum_bal_coin, cum_bal, filled_price):
     cum_bal_coin = cum_bal * filled_price
     return cum_bal_coin
 
