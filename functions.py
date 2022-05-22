@@ -12,11 +12,6 @@ def get_prof_trades(profit):
     return profit_check
 
 
-def get_coin_perc(buy_hold, profit):
-    coin_perc = buy_hold * (1.0 + profit)
-    return coin_perc
-
-
 def get_prof_trades_tot(total_trades, winning_trades):
     trades_perc = int(winning_trades) / int(total_trades)  # * 100.0
     return trades_perc

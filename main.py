@@ -7,7 +7,7 @@ import altair_viewer
 from altair import pipe, limit_rows, to_values
 import streamlit as st
 import time
-from functions import get_coin_bal, get_coin_perc, get_profit, get_prof_trades, get_prof_trades_tot
+from functions import get_prof_trades, get_prof_trades_tot
 
 st.set_page_config(page_title='Tuned JSON Viewer', page_icon="🔌", layout='wide', initial_sidebar_state='expanded')
 
@@ -92,7 +92,7 @@ if uploaded_file is not None:
 
     merged['profitableTradesTot'] = merged['profitableTrades'].cumsum()
 
-    merged['Strategy_Percentage'] = merged.apply(lambda x: get_coin_perc(x["buy_hold"], x['Cumulative_Profit']), axis=1)
+    merged['Strategy_Percentage'] = merged.apply(lambda x: x["buy_hold"] * (1.0 + x['Cumulative_Profit']), axis=1)
 
     merged['Profitable_Trades_Perc'] = merged.apply(lambda x: get_prof_trades_tot(x['tradeNo']+1,
                                                                                   x['profitableTradesTot']),
