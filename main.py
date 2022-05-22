@@ -18,9 +18,9 @@ alt.data_transformers.enable('custom')
 alt.renderers.enable('altair_viewer')
 
 
-# uploaded_file = st.file_uploader("Choose a file", type=['json'])
+uploaded_file = st.file_uploader("Choose a file", type=['json'])
 
-uploaded_file = open('json.json')
+# uploaded_file = open('json.json')
 
 if uploaded_file is not None:
     st.balloons()
@@ -81,7 +81,7 @@ if uploaded_file is not None:
     result = merged.groupby([merged['filledTime'].dt.year, merged['filledTimeM'].dt.month])['cumBal'].last()
 
     start_price = merged['filledPrice'][0]
-    merged["buy_hold"] = merged.apply(lambda x: get_buy_hold(x['filledPrice']), axis=1)
+    merged["buy_hold"] = merged.apply(lambda x: get_buy_hold(start_price, x['filledPrice']), axis=1)
 
     merged['profitableTrades'] = merged.apply(lambda x: get_prof_trades(x['profit']), axis=1)
 
