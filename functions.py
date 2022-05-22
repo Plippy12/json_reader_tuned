@@ -1,5 +1,6 @@
 import altair as alt
-
+from altair import pipe, limit_rows, to_values
+import altair_viewer
 # All functions to be placed within this file
 
 def get_cum_bal(start_alloc, profit):
