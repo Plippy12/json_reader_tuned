@@ -73,19 +73,18 @@ if uploaded_file is not None:
 
     merged['trade_duration'] = (merged['filledTime'] - merged.filledTime.shift(1)).dt.total_seconds() / 60 / 60
 
-    diff = merged["startAlloc"][0]
+    diff1 = merged["startAlloc"][0]
 
     def get_cum_bal1(diff, start_alloc, profit):
         # global diff
-        diff_upd = diff
-        if diff_upd == start_alloc:
-            diff_upd = start_alloc + profit
+        if diff == start_alloc:
+            diff = start_alloc + profit
         else:
-            diff_upd += profit
+            diff += profit
 
         return diff
 
-    merged["cumBal"] = merged.apply(lambda x: get_cum_bal1(diff, x['startAlloc'], x['profit']), axis=1)
+    merged["cumBal"] = merged.apply(lambda x: get_cum_bal1(diff1, x['startAlloc'], x['profit']), axis=1)
 
     cum_bal_coin = 0
     merged['cumBalCoin'] = merged.apply(lambda x: get_coin_bal(cum_bal_coin, x['cumBal'], x['filledPrice']), axis=1)
