@@ -77,10 +77,11 @@ if uploaded_file is not None:
 
     def get_cum_bal1(diff, start_alloc, profit):
         # global diff
-        if diff == start_alloc:
-            diff = start_alloc + profit
+        diff_upd = diff
+        if diff_upd == start_alloc:
+            diff_upd = start_alloc + profit
         else:
-            diff += profit
+            diff_upd += profit
 
         return diff
 
