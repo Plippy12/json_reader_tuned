@@ -177,9 +177,16 @@ if uploaded_file is not None:
         strokeWidth=4,
         fill='#1c1c1e',
         stroke='#131313',
+    ).properties().configure_axisY(
+        titleAngle=0,
+        titleY=-10,
+        titleX=-60,
+        labelPadding=160,
+        labelAlign='left'
     )
 
-    bars1 = alt.Chart(merged).mark_bar().encode(
+    bars1 = alt.Chart(merged, title=f'This Chart shows the time between trade closes in Hours'
+                      ).mark_bar().encode(
         x=alt.X('tradeNo:O', sort=alt.EncodingSortField(field="monthYear", op='count', order='ascending'),
                 scale=alt.Scale(nice=False),
                 axis=alt.Axis(formatType="timeUnit", title='Date',
@@ -195,9 +202,16 @@ if uploaded_file is not None:
         strokeWidth=4,
         fill='#1c1c1e',
         stroke='#131313',
+    ).properties().configure_axisY(
+        titleAngle=0,
+        titleY=-10,
+        titleX=-60,
+        labelPadding=160,
+        labelAlign='left'
     )
 
-    trades = alt.Chart(merged).transform_fold(
+    trades = alt.Chart(merged, title='This chart shows you the success rate over time'
+                       ).transform_fold(
         ['Profitable_Trades_Perc', 'Profitable_Trades_Avg']).mark_line(
         interpolate='basis',
         line={'color': 'yellow'},
@@ -220,15 +234,13 @@ if uploaded_file is not None:
         strokeWidth=4,
         fill='#1c1c1e',
         stroke='#131313',
+    ).properties().configure_axisY(
+        titleAngle=0,
+        titleY=-10,
+        titleX=-60,
+        labelPadding=160,
+        labelAlign='left'
     )
-
-    chart.properties().configure_axisY(
-            titleAngle=0,
-            titleY=-10,
-            titleX=-60,
-            labelPadding=160,
-            labelAlign='left'
-        )
 
     chart = alt.Chart(merged,
                       title=f'This chart shows you the Accumulated % of {startAlloc[0]} '
@@ -254,9 +266,16 @@ if uploaded_file is not None:
         strokeWidth=4,
         fill='#1c1c1e',
         stroke='#131313',
+    ).properties().configure_axisY(
+        titleAngle=0,
+        titleY=-10,
+        titleX=-60,
+        labelPadding=160,
+        labelAlign='left'
     )
 
-    chart3 = alt.Chart(merged).transform_fold(
+    chart3 = alt.Chart(merged, title=f'This Chart shows you the Max Drawdown from an equity High'
+                       ).transform_fold(
         ["Cumulative_Profit_Max", 'Cumulative_Profit_Min']).mark_line(
         interpolate='basis',
         line={'color': 'yellow'},
@@ -277,9 +296,17 @@ if uploaded_file is not None:
         strokeWidth=4,
         fill='#1c1c1e',
         stroke='#131313',
+    ).properties().configure_axisY(
+        titleAngle=0,
+        titleY=-10,
+        titleX=-60,
+        labelPadding=160,
+        labelAlign='left'
     )
 
-    chart1 = alt.Chart(merged).mark_line(
+    chart1 = alt.Chart(merged, title=f'This chart shows you the Accumulated Balance'
+                                     f' of {startAlloc[0]} {data2["currencyPairDetails.settleCurrency"][1]}'
+                       ).mark_line(
         interpolate='basis',
         line={'color': 'yellow'},
         opacity=0.5
@@ -300,9 +327,17 @@ if uploaded_file is not None:
         strokeWidth=4,
         fill='#1c1c1e',
         stroke='#131313',
+    ).properties().configure_axisY(
+        titleAngle=0,
+        titleY=-10,
+        titleX=-60,
+        labelPadding=160,
+        labelAlign='left'
     )
 
-    chart2 = alt.Chart(merged).transform_fold(
+    chart2 = alt.Chart(merged, title=f'This chart compares the Buy and Hold to the Strategy PnL '
+                                     f'in {data2["currencyPairDetails.quote"][1]}'
+                       ).transform_fold(
         ['buy_hold', 'Strategy_Percentage']).mark_line(
         interpolate='basis',
         line={'color': 'yellow'},
@@ -324,7 +359,14 @@ if uploaded_file is not None:
         strokeWidth=4,
         fill='#1c1c1e',
         stroke='#131313',
+    ).properties().configure_axisY(
+        titleAngle=0,
+        titleY=-10,
+        titleX=-60,
+        labelPadding=160,
+        labelAlign='left'
     )
+
     #
     # selectors = alt.Chart(merged).mark_point().encode(
     #     x='filledTime:T',
