@@ -178,7 +178,6 @@ if uploaded_file is not None:
         fill='#1c1c1e',
         stroke='#131313',
     ).properties().configure_axisY(
-        labelPadding=160,
         labelAlign='right'
     )
 
@@ -200,7 +199,6 @@ if uploaded_file is not None:
         fill='#1c1c1e',
         stroke='#131313',
     ).properties().configure_axisY(
-        labelPadding=160,
         labelAlign='right'
     )
 
@@ -229,7 +227,6 @@ if uploaded_file is not None:
         fill='#1c1c1e',
         stroke='#131313',
     ).properties().configure_axisY(
-        labelPadding=160,
         labelAlign='right'
     )
 
@@ -258,7 +255,6 @@ if uploaded_file is not None:
         fill='#1c1c1e',
         stroke='#131313',
     ).properties().configure_axisY(
-        labelPadding=160,
         labelAlign='right'
     )
 
@@ -285,7 +281,6 @@ if uploaded_file is not None:
         fill='#1c1c1e',
         stroke='#131313',
     ).properties().configure_axisY(
-        labelPadding=160,
         labelAlign='right'
     )
 
@@ -313,7 +308,6 @@ if uploaded_file is not None:
         fill='#1c1c1e',
         stroke='#131313',
     ).properties().configure_axisY(
-        labelPadding=160,
         labelAlign='right'
     )
 
@@ -342,7 +336,6 @@ if uploaded_file is not None:
         fill='#1c1c1e',
         stroke='#131313',
     ).properties().configure_axisY(
-        labelPadding=160,
         labelAlign='right'
     )
 
