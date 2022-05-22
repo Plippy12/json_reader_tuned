@@ -3,8 +3,8 @@
 # All functions to be placed within this file
 
 def get_cum_bal(start_alloc, profit):
-    start_alloc += profit
-    return start_alloc
+    start_alloc1 = start_alloc + profit
+    return start_alloc1
 
 
 def get_coin_bal(cum_bal_coin, cum_bal, filled_price):
