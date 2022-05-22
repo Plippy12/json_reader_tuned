@@ -85,7 +85,7 @@ if uploaded_file is not None:
 
         return diff
 
-    merged["cumBal"] = merged.apply(lambda x: get_cum_bal1(diff, x["startAlloc"], x['profit']), axis=1)
+    merged["cumBal"] = merged.apply(lambda x: get_cum_bal1(diff1, x["startAlloc"], x['profit']), axis=1)
 
     cum_bal_coin = 0
     merged['cumBalCoin'] = merged.apply(lambda x: get_coin_bal(cum_bal_coin, x['cumBal'], x['filledPrice']), axis=1)
