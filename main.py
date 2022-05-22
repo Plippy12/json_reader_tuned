@@ -79,20 +79,11 @@ if uploaded_file is not None:
     result = merged.groupby([merged['filledTime'].dt.year, merged['filledTimeM'].dt.month])['cumBal'].last()
     start_price = merged['filledPrice'][0]
     merged["buy_hold"] = merged.apply(lambda x: x['filledPrice'] / start_price - 1, axis=1)
-
-
-    def get_prof_trades(profit):
-        if float(profit) > 0:
-            profit_check = 1
-        else:
-            profit_check = 0
-        return profit_check
-
     merged['profitableTrades'] = merged.apply(lambda x: 1.0 if float(x['profit']) > 0.0 else 0.0, axis=1)
     merged["Cumulative_Profit"] = merged.apply(lambda x: ((x['cumBal'] - x['startAlloc']) / x['startAlloc']), axis=1)
     merged['profitableTradesTot'] = merged['profitableTrades'].cumsum()
     merged['Strategy_Percentage'] = merged.apply(lambda x: x["buy_hold"] * (1.0 + x['Cumulative_Profit']), axis=1)
-    merged['Profitable_Trades_Perc'] = merged.apply(lambda x: x['profitableTradesTot'] / x['tradeNo']+1, axis=1)
+    merged['Profitable_Trades_Perc'] = merged.apply(lambda x: x['profitableTradesTot'] / (x['tradeNo']+1), axis=1)
     merged["Cumulative_Profit_Max"] = merged.Cumulative_Profit.shift(fill_value=0).cummax()
     merged["Cumulative_Profit_Min"] = np.where((merged["Cumulative_Profit_Max"] < merged["Cumulative_Profit_Max"][1]),
                                                merged.loc[:, ["Cumulative_Profit"]].min(1),
