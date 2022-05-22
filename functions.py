@@ -18,8 +18,7 @@ def get_coin_bal(cum_bal, filled_price):
     return cum_bal_coin
 
 
-def get_buy_hold(current_price):
-    global start_price
+def get_buy_hold(start_price, current_price):
     if start_price is None:
         start_price = start_price
     buy_hold = current_price / start_price - 1
