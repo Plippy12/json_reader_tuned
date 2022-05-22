@@ -349,8 +349,6 @@ if uploaded_file is not None:
     st.subheader(f'This chart shows you the Accumulated % of {startAlloc[0]} '
                  f'{data2["currencyPairDetails.settleCurrency"][1]}')
     st.altair_chart(chart, use_container_width=True)
-    st.subheader(f'This Chart shows you the Max Drawdown from an equity High')
-    st.altair_chart(chart3, use_container_width=True)
 
     check = (coinData['exchange'][0] == 'BYBIT' or
              coinData['exchange'][0] == 'BINANCE_COIN_FUTURES' or
@@ -364,6 +362,8 @@ if uploaded_file is not None:
                            f'in {data2["currencyPairDetails.quote"][1]}')
         expander.altair_chart(chart2, use_container_width=True)
 
+    st.subheader(f'This Chart shows you the Max Drawdown from an equity High')
+    st.altair_chart(chart3, use_container_width=True)
     st.subheader(f'This chart shows you the Accumulated Balance'
                  f' of {startAlloc[0]} {data2["currencyPairDetails.settleCurrency"][1]}')
     st.altair_chart(chart1, use_container_width=True)
