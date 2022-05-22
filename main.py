@@ -85,11 +85,8 @@ if uploaded_file is not None:
     result = merged.groupby([merged['filledTime'].dt.year, merged['filledTimeM'].dt.month])['cumBal'].last()
 
     start_price = merged['filledPrice'][0]
-    merged["buy_hold_lambda"] = merged.apply(lambda x: x['filledPrice'] / start_price - 1, axis=1)
-    print(merged["buy_hold_lambda"])
+    merged["buy_hold"] = merged.apply(lambda x: x['filledPrice'] / start_price - 1, axis=1)
 
-    merged["buy_hold"] = merged.apply(lambda x: get_buy_hold(start_price, x['filledPrice']), axis=1)
-    print(merged["buy_hold"])
     merged['profitableTrades'] = merged.apply(lambda x: get_prof_trades(x['profit']), axis=1)
 
     merged["Cumulative_Profit"] = merged.apply(lambda x: get_profit(x['cumBal'], x['startAlloc']), axis=1)
