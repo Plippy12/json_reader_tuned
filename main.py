@@ -171,6 +171,10 @@ if uploaded_file is not None:
         y=alt.Y('profit1', scale=alt.Scale(nice=False),
                 axis=alt.Axis(title=f'Monthly Percentage', grid=True, format='%',
                               offset=0))
+    ).configure_view(
+        strokeWidth=4,
+        fill='#1c1c1e',
+        stroke='#131313',
     )
 
     bars1 = alt.Chart(merged).mark_bar().encode(
@@ -185,6 +189,10 @@ if uploaded_file is not None:
         y=alt.Y('trade_duration', scale=alt.Scale(nice=False),
                 axis=alt.Axis(title=f'Average Time in Hours between Trade Close', grid=True,
                               offset=0))
+    ).configure_view(
+        strokeWidth=4,
+        fill='#1c1c1e',
+        stroke='#131313',
     )
 
     trades = alt.Chart(merged).transform_fold(
@@ -206,6 +214,10 @@ if uploaded_file is not None:
                               labelOverlap=True)),
         color=alt.Color('key:N', scale={"range": ["yellow", "red"]})
         # alt.Color('key', scale={"range": ["yellow", "orange"]})  # color='key:N'
+    ).configure_view(
+        strokeWidth=4,
+        fill='#1c1c1e',
+        stroke='#131313',
     )
 
     chart.properties().configure_axisY(
@@ -236,11 +248,6 @@ if uploaded_file is not None:
                               labelPadding=0,
                               labelOverlap=True)),
         color=alt.Color('key:N', scale={"range": ["yellow", "red"]})
-    ).configure_header(
-        titleColor='green',
-        titleFontSize=14,
-        labelColor='red',
-        labelFontSize=14
     ).configure_view(
         strokeWidth=4,
         fill='#1c1c1e',
@@ -264,6 +271,10 @@ if uploaded_file is not None:
                               labelPadding=0,
                               labelOverlap=True)),
         color=alt.Color('key:N', scale={"range": ["yellow", "red"]})
+    ).configure_view(
+        strokeWidth=4,
+        fill='#1c1c1e',
+        stroke='#131313',
     )
 
     chart1 = alt.Chart(merged).mark_line(
@@ -283,6 +294,10 @@ if uploaded_file is not None:
                               labelSeparation=3,
                               labelPadding=0,
                               labelOverlap=True))
+    ).configure_view(
+        strokeWidth=4,
+        fill='#1c1c1e',
+        stroke='#131313',
     )
 
     chart2 = alt.Chart(merged).transform_fold(
@@ -303,6 +318,10 @@ if uploaded_file is not None:
                               labelPadding=0,
                               labelOverlap=True)),
         color=alt.Color('key:N', scale={"range": ["yellow", "red"]})
+    ).configure_view(
+        strokeWidth=4,
+        fill='#1c1c1e',
+        stroke='#131313',
     )
     #
     # selectors = alt.Chart(merged).mark_point().encode(
