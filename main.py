@@ -178,11 +178,8 @@ if uploaded_file is not None:
         fill='#1c1c1e',
         stroke='#131313',
     ).properties().configure_axisY(
-        titleAngle=0,
-        titleY=-10,
-        titleX=-60,
         labelPadding=160,
-        labelAlign='left'
+        labelAlign='right'
     )
 
     bars1 = alt.Chart(merged, title=f'This Chart shows the time between trade closes in Hours'
@@ -203,11 +200,8 @@ if uploaded_file is not None:
         fill='#1c1c1e',
         stroke='#131313',
     ).properties().configure_axisY(
-        titleAngle=0,
-        titleY=-10,
-        titleX=-60,
         labelPadding=160,
-        labelAlign='left'
+        labelAlign='right'
     )
 
     trades = alt.Chart(merged, title='This chart shows you the success rate over time'
@@ -235,11 +229,8 @@ if uploaded_file is not None:
         fill='#1c1c1e',
         stroke='#131313',
     ).properties().configure_axisY(
-        titleAngle=0,
-        titleY=-10,
-        titleX=-60,
         labelPadding=160,
-        labelAlign='left'
+        labelAlign='right'
     )
 
     chart = alt.Chart(merged,
@@ -267,9 +258,6 @@ if uploaded_file is not None:
         fill='#1c1c1e',
         stroke='#131313',
     ).properties().configure_axisY(
-        titleAngle=0,
-        titleY=-10,
-        titleX=-60,
         labelPadding=160,
         labelAlign='right'
     )
@@ -297,11 +285,8 @@ if uploaded_file is not None:
         fill='#1c1c1e',
         stroke='#131313',
     ).properties().configure_axisY(
-        titleAngle=0,
-        titleY=-10,
-        titleX=-60,
         labelPadding=160,
-        labelAlign='left'
+        labelAlign='right'
     )
 
     chart1 = alt.Chart(merged, title=f'This chart shows you the Accumulated Balance'
@@ -328,11 +313,8 @@ if uploaded_file is not None:
         fill='#1c1c1e',
         stroke='#131313',
     ).properties().configure_axisY(
-        titleAngle=0,
-        titleY=-10,
-        titleX=-60,
         labelPadding=160,
-        labelAlign='left'
+        labelAlign='right'
     )
 
     chart2 = alt.Chart(merged, title=f'This chart compares the Buy and Hold to the Strategy PnL '
@@ -360,11 +342,8 @@ if uploaded_file is not None:
         fill='#1c1c1e',
         stroke='#131313',
     ).properties().configure_axisY(
-        titleAngle=0,
-        titleY=-10,
-        titleX=-60,
         labelPadding=160,
-        labelAlign='left'
+        labelAlign='right'
     )
 
     #
