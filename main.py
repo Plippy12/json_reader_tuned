@@ -405,9 +405,12 @@ if uploaded_file is not None:
     st.altair_chart(bars1, use_container_width=True)
 
     number = st.number_input('Length of the Moving Average to be used on the Profitable Trades Percentage', value=50)
-    merged['Profitable_Trades_Avg'] = merged['profitableTrades'].rolling(window=number, min_periods=1).mean()
+    if number == None or number == 0:
+        st.text(f'Pick a length greater than 0 for the moving average to populate chart')
+    else:
+        merged['Profitable_Trades_Avg'] = merged['profitableTrades'].rolling(window=number, min_periods=1).mean()
+        st.altair_chart(trades, use_container_width=True)
 
-    st.altair_chart(trades, use_container_width=True)
     st.text(f'Initial Allocation: {startAlloc[0]} {data2["currencyPairDetails.settleCurrency"][1]}')
     st.text(f'Final Balance: {round(finalBal, 2)} {data2["currencyPairDetails.settleCurrency"][1]}')
     st.text(f'Total Commission Paid: {round(commSum, 2)} in {data2["currencyPairDetails.settleCurrency"][1]}')
