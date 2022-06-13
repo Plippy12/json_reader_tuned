@@ -291,7 +291,7 @@ def main():
         )
 
         chart3 = alt.Chart(merged, title=f'This Chart shows you the Max Drawdown from an equity High'
-                        ).transform_fold(
+                           ).transform_fold(
             ["Cumulative_Profit_Max", 'Cumulative_Profit_Min', 'buy_hold_mdd']).mark_line(
             interpolate='basis',
             line={'color': 'yellow'},
@@ -299,14 +299,41 @@ def main():
         ).encode(
             x=alt.X('filledTime:T', scale=alt.Scale(nice=False),
                     axis=alt.Axis(formatType="timeUnit", format="%B of %Y", title='Date',
-                                labelAngle=-70,
-                                labelSeparation=3,
-                                labelPadding=0,
-                                labelOverlap=True)),
+                                  labelAngle=-70,
+                                  labelSeparation=3,
+                                  labelPadding=0,
+                                  labelOverlap=True)),
             y=alt.Y('value:Q', scale=alt.Scale(nice=False),
                     axis=alt.Axis(labelSeparation=3, format='%',
-                                labelPadding=0,
-                                labelOverlap=True)),
+                                  labelPadding=0,
+                                  labelOverlap=True)),
+            color=alt.Color('key:N', scale={"range": ["yellow", "red", "orange"]})
+        ).configure_view(
+            strokeWidth=4,
+            fill='#1c1c1e',
+            stroke='#131313',
+        ).properties().configure_axisY(
+            labelAlign='right'
+        )
+
+        chartmdd = alt.Chart(merged, title=f'This Chart shows you the Max Drawdown from an equity High versus '
+                                           f'Buy and Hold Max Drawdown'
+                           ).transform_fold(
+            ['worst_mdd', 'buy_hold_mdd']).mark_line(
+            interpolate='basis',
+            line={'color': 'yellow'},
+            opacity=0.5
+        ).encode(
+            x=alt.X('filledTime:T', scale=alt.Scale(nice=False),
+                    axis=alt.Axis(formatType="timeUnit", format="%B of %Y", title='Date',
+                                  labelAngle=-70,
+                                  labelSeparation=3,
+                                  labelPadding=0,
+                                  labelOverlap=True)),
+            y=alt.Y('value:Q', scale=alt.Scale(nice=False),
+                    axis=alt.Axis(labelSeparation=3, format='%',
+                                  labelPadding=0,
+                                  labelOverlap=True)),
             color=alt.Color('key:N', scale={"range": ["yellow", "red", "orange"]})
         ).configure_view(
             strokeWidth=4,
@@ -436,6 +463,7 @@ def main():
             expander.altair_chart(chart2, use_container_width=True)
 
         st.altair_chart(chart3, use_container_width=True)
+        st.altair_chart(chartmdd, use_container_width=True)
         st.write(f'The worst Realised Max Drawdown you incurred was {round(finalMDD, 2)}%')
         st.write(f'Buy and Hold Max Drawdown was {round(buyholdMDD, 2)}%')
         st.altair_chart(chart1, use_container_width=True)
