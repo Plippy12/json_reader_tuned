@@ -292,7 +292,7 @@ def main():
 
         chart3 = alt.Chart(merged, title=f'This Chart shows you the Max Drawdown from an equity High'
                            ).transform_fold(
-            ["Cumulative_Profit_Max", 'Cumulative_Profit_Min', 'buy_hold_mdd']).mark_line(
+            ["Cumulative_Profit_Max", 'Cumulative_Profit_Min']).mark_line(
             interpolate='basis',
             line={'color': 'yellow'},
             opacity=0.5
