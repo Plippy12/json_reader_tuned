@@ -108,7 +108,17 @@ def main():
                                                       if x['Losing_trade_counter_tot'] > 0.0 else 0.0,
                                                       axis=1)
 
-        merged["buy_hold"] = merged.apply(lambda x: x['filledPrice'] / start_price - 1, axis=1)
+        merged["buy_hold"] = merged.apply(lambda x: x['filledPrice'] / start_price - 1.0, axis=1)
+        merged['buy_hold_max'] = merged.buy_hold.shift(fill_value=0).cummax()
+        merged["buy_hold_min"] = np.where((merged["buy_hold_max"] < merged["buy_hold_max"][1]),
+                                          merged.loc[:, ["buy_hold"]].min(1),
+                                          merged.loc[:, ["buy_hold"]].max(1),
+                                          )
+        merged['buy_hold_mdd'] = merged.apply(lambda x: 0.0 if x['buy_hold_max'] <=
+                                              0.0 else (1.0 - ((1.0 + x["buy_hold_min"]) /
+                                                               (1.0 + x['buy_hold_max']))) * -1.0,
+                                              axis=1)
+
         merged['profitableTrades'] = merged.apply(lambda x: 1.0 if float(x['profit']) > 0.0 else 0.0, axis=1)
         merged["Cumulative_Profit"] = merged.apply(lambda x: ((x['cumBal'] - x['startAlloc']) / x['startAlloc']), axis=1)
         merged['profitableTradesTot'] = merged['profitableTrades'].cumsum()
@@ -116,9 +126,9 @@ def main():
         merged['Profitable_Trades_Perc'] = merged.apply(lambda x: x['profitableTradesTot'] / (x['tradeNo']+1), axis=1)
         merged["Cumulative_Profit_Max"] = merged.Cumulative_Profit.shift(fill_value=0).cummax()
         merged["Cumulative_Profit_Min"] = np.where((merged["Cumulative_Profit_Max"] < merged["Cumulative_Profit_Max"][1]),
-                                                merged.loc[:, ["Cumulative_Profit"]].min(1),
-                                                merged.loc[:, ["Cumulative_Profit"]].max(1),
-                                                )
+                                                   merged.loc[:, ["Cumulative_Profit"]].min(1),
+                                                   merged.loc[:, ["Cumulative_Profit"]].max(1),
+                                                   )
 
         merged["Cumulative_Profit_Max"] = merged.Cumulative_Profit.shift(fill_value=0).cummax()
 
@@ -126,6 +136,7 @@ def main():
                                                             0.0 else (1.0 - ((1.0 + x["Cumulative_Profit_Min"]) /
                                                                             (1.0 + x['Cumulative_Profit_Max']))) * -1.0,
                                         axis=1)
+
 
         merged['worst_mdd'] = merged.worst_mdd.shift(fill_value=0).cummin()
 
@@ -280,7 +291,7 @@ def main():
 
         chart3 = alt.Chart(merged, title=f'This Chart shows you the Max Drawdown from an equity High'
                         ).transform_fold(
-            ["Cumulative_Profit_Max", 'Cumulative_Profit_Min', 'worst_mdd']).mark_line(
+            ["Cumulative_Profit_Max", 'Cumulative_Profit_Min', 'buy_hold_mdd']).mark_line(
             interpolate='basis',
             line={'color': 'yellow'},
             opacity=0.5
@@ -403,6 +414,8 @@ def main():
         finalPerc = merged['Cumulative_Profit'].iloc[-1] * 100.0
         finalBnH = merged['buy_hold'].iloc[-1] * 100.0
         finalMDD = (merged['worst_mdd'].iloc[-1] * 100.0)
+        buyholdMDD = (merged['buy_hold_mdd'].iloc[-1] * 100.0)
+
         avg_win_trade = (merged['Average_winning_trade'].iloc[-1]) * 100.0
         avg_lose_trade = (merged['Average_losing_trade'].iloc[-1]) * 100.0
 
@@ -423,6 +436,7 @@ def main():
 
         st.altair_chart(chart3, use_container_width=True)
         st.write(f'The worst Realised Max Drawdown you incurred was {round(finalMDD, 2)}%')
+        st.write(f'Buy and Hold Max Drawdown was {round(buyholdMDD, 2)}%')
         st.altair_chart(chart1, use_container_width=True)
         st.altair_chart(bars, use_container_width=True)
         st.altair_chart(bars1, use_container_width=True)
