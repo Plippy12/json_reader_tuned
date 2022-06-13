@@ -115,8 +115,10 @@ def main():
                                           merged.loc[:, ["buy_hold"]].max(1),
                                           )
         merged['buy_hold_mdd'] = merged.apply(lambda x: 0.0 if x['buy_hold_max'] <=
-                                              0.0 else (1.0 - ((1.0 + x["buy_hold_min"]) /
-                                                               (1.0 + x['buy_hold_max']))) * -1.0,
+                                              0.0 or (1.0 - ((1.0 + x["buy_hold_min"]) /
+                                                             (1.0 + x['buy_hold_max']))) * -1.0 > 0.0
+                                              else (1.0 - ((1.0 + x["buy_hold_min"]) /
+                                                           (1.0 + x['buy_hold_max']))) * -1.0,
                                               axis=1)
 
         merged['profitableTrades'] = merged.apply(lambda x: 1.0 if float(x['profit']) > 0.0 else 0.0, axis=1)
@@ -133,10 +135,9 @@ def main():
         merged["Cumulative_Profit_Max"] = merged.Cumulative_Profit.shift(fill_value=0).cummax()
 
         merged['worst_mdd'] = merged.apply(lambda x: 0.0 if x['Cumulative_Profit_Max'] <=
-                                                            0.0 else (1.0 - ((1.0 + x["Cumulative_Profit_Min"]) /
-                                                                            (1.0 + x['Cumulative_Profit_Max']))) * -1.0,
-                                        axis=1)
-
+                                           0.0 else (1.0 - ((1.0 + x["Cumulative_Profit_Min"]) /
+                                                            (1.0 + x['Cumulative_Profit_Max']))) * -1.0,
+                                           axis=1)
 
         merged['worst_mdd'] = merged.worst_mdd.shift(fill_value=0).cummin()
 
