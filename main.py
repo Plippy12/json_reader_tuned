@@ -2,6 +2,7 @@ import pandas as pd
 import json
 import altair as alt
 import numpy as np
+import pprint
 import altair_viewer
 from altair import pipe, limit_rows, to_values
 import streamlit as st
@@ -21,8 +22,9 @@ def main():
     alt.renderers.enable('altair_viewer')
 
     uploaded_file = st.file_uploader("Choose a file", type=['json'])
-
-    # uploaded_file = open('json.json')
+    # json_open = open('json.json')
+    # uploaded_file = json.load(json_open)
+    # # uploaded_file = open('json.json')
     option = st.selectbox(
         'What would you like to View? Batchtest, Backtest or Strategy Pack(Single Coin)',
         ('Batchtest', 'Backtest', 'Strategy Pack(Single Coin)'))
@@ -43,7 +45,6 @@ def main():
 
             data1 = pd.json_normalize(json_data['trades'], record_path=['orders'], meta=['tradeNo'])
             print(data1.keys())
-            data1.to_csv('csvcheck.csv')
             data2 = pd.json_normalize(json_data, record_path=['trades'])
             titleData = pd.json_normalize(json_data['strategy'])
             coinData = pd.json_normalize(json_data['market'])
@@ -494,13 +495,66 @@ def main():
             # merged.to_csv('out.csv')
         else:
             st.text("JSON not uploaded")
+
     if option == 'Batchtest':
-        st.text(f'Work in Progress')
+        if uploaded_file is not None:
+            with st.spinner('Wait for it...'):
+                time.sleep(3)
+                st.balloons()
+            st.success('Ready to Analyse!!')
+
+            json_data_batch = json.load(uploaded_file)
+            batch_data = pd.json_normalize(data=json_data_batch)
+            batch_data_name = pd.json_normalize(
+                json_data_batch, 'strategyParameters', ['performance'])
+            print(batch_data_name)
+            # print(batch_data.keys())
+            # print(batch_data)
+            #
+            # batch_data.to_csv('name.csv')
 
     if option == 'Strategy Pack(Single Coin)':
         st.text(f'Work in Progress')
 
-
+#
+# data = [
+#     {
+#         "company": "Google",
+#         "tagline": "Dont be evil",
+#         "management": {"CEO": "Sundar Pichai"},
+#         "department": [
+#             {"name": "Gmail", "revenue (bn)": 123},
+#             {"name": "GCP", "revenue (bn)": 400},
+#             {"name": "Google drive", "revenue (bn)": 600},
+#         ],
+#     },
+#     {
+#         "company": "Microsoft",
+#         "tagline": "Be What's Next",
+#         "management": {"CEO": "Satya Nadella"},
+#         "department": [
+#             {"name": "Onedrive", "revenue (bn)": 13},
+#             {"name": "Azure", "revenue (bn)": 300},
+#             {"name": "Microsoft 365", "revenue (bn)": 300},
+#         ],
+#     },
+#
+# ]
+# result = pd.json_normalize(
+#     data
+# )
+# result1 = pd.json_normalize(
+#     data, "department"
+# )
+# result2 = pd.json_normalize(
+#     data, "department", ["company", "tagline", ["management", "CEO"]]
+# )
+# result.to_csv('res.csv')
+# result1.to_csv('res1.csv')
+# result2.to_csv('res2.csv')
+# print(result)
+# print(result1)
+# print(result2)
 # pip install -r requirements.txt
 # python -m pip install --upgrade --force-reinstall pip
 
