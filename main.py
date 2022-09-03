@@ -2,15 +2,11 @@ import pandas as pd
 import json
 import altair as alt
 import numpy as np
-import pprint
-import altair_viewer
 from altair import pipe, limit_rows, to_values
 import streamlit as st
 import time
 import sys
 from streamlit import cli as stcli
-import subprocess
-import os
 
 def main():
     st.set_page_config(page_title='Tuned JSON Viewer', page_icon="🔌", layout='wide', initial_sidebar_state='expanded')
@@ -404,44 +400,6 @@ def main():
                 labelAlign='right'
             )
 
-            #
-            # selectors = alt.Chart(merged).mark_point().encode(
-            #     x='filledTime:T',
-            #     opacity=alt.value(0),
-            # ).add_selection(
-            #     nearest
-            # )
-            #
-            # # Draw points on the line, and highlight based on selection
-            # points = chart.mark_point().encode(
-            #     opacity=alt.condition(nearest, alt.value(1), alt.value(0))
-            # )
-            #
-            # # Draw text labels near the points, and highlight based on selection
-            # text = chart.mark_text(align='left', dx=5, dy=-5).encode(
-            #     text=alt.condition(nearest, 'cumProf', alt.value(' '))
-            # )
-            #
-            # # Draw a rule at the location of the selection
-            # rules = alt.Chart(merged).mark_rule(color='gray').encode(
-            #     x='filledTime:T',
-            # ).transform_filter(
-            #     nearest
-            # )
-            #
-            # # Put the five layers into a chart and bind the data
-            # plot = alt.layer(
-            #     chart.mark_line(color='blue').encode(
-            #         y=alt.Y('cumProf', scale=alt.Scale(nice=False),
-            #                 axis=alt.Axis(title=f'Accumulated % of {startAlloc[0]} '
-            #                                     f'{data2["currencyPairDetails.settleCurrency"][1]}',
-            #                               grid=True, format='%',
-            #                               offset=0))),
-            #     selectors,
-            #     points,
-            #     text,
-            #     rules
-            # )
 
             finalBal = merged['cumBal'].iloc[-1]
             finalPerc = merged['Cumulative_Profit'].iloc[-1] * 100.0
@@ -516,47 +474,6 @@ def main():
     if option == 'Strategy Pack(Single Coin)':
         st.text(f'Work in Progress')
 
-#
-# data = [
-#     {
-#         "company": "Google",
-#         "tagline": "Dont be evil",
-#         "management": {"CEO": "Sundar Pichai"},
-#         "department": [
-#             {"name": "Gmail", "revenue (bn)": 123},
-#             {"name": "GCP", "revenue (bn)": 400},
-#             {"name": "Google drive", "revenue (bn)": 600},
-#         ],
-#     },
-#     {
-#         "company": "Microsoft",
-#         "tagline": "Be What's Next",
-#         "management": {"CEO": "Satya Nadella"},
-#         "department": [
-#             {"name": "Onedrive", "revenue (bn)": 13},
-#             {"name": "Azure", "revenue (bn)": 300},
-#             {"name": "Microsoft 365", "revenue (bn)": 300},
-#         ],
-#     },
-#
-# ]
-# result = pd.json_normalize(
-#     data
-# )
-# result1 = pd.json_normalize(
-#     data, "department"
-# )
-# result2 = pd.json_normalize(
-#     data, "department", ["company", "tagline", ["management", "CEO"]]
-# )
-# result.to_csv('res.csv')
-# result1.to_csv('res1.csv')
-# result2.to_csv('res2.csv')
-# print(result)
-# print(result1)
-# print(result2)
-# pip install -r requirements.txt
-# python -m pip install --upgrade --force-reinstall pip
 
 if __name__ == '__main__':
     if st._is_running_with_streamlit:
@@ -564,13 +481,3 @@ if __name__ == '__main__':
     else:
         sys.argv = ["streamlit", "run", sys.argv[0]]
         sys.exit(stcli.main())
-
-# if __name__ == '__main__':
-#     sys.argv = ["streamlit", "run", "main.py"]
-#     # sys.exit(stcli.main())
-
-# subprocess.run("streamlit run main.py")
-# stdout = subprocess.DEVNULL, shell=True, preexec_fn=os.setsid
-# process = subprocess.Popen(["streamlit", "run", 'main.py'])
-
-# subprocess.run(["streamlit", "run", "main.py"])
