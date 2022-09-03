@@ -27,7 +27,7 @@ def main():
     # # uploaded_file = open('json.json')
     option = st.selectbox(
         'What would you like to View? Batchtest, Backtest or Strategy Pack(Single Coin)',
-        ('Batchtest', 'Backtest', 'Strategy Pack(Single Coin)'))
+        ('Backtest', 'Strategy Pack(Single Coin)'))
 
     if option == 'Backtest':
         if uploaded_file is not None:
