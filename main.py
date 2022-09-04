@@ -109,6 +109,7 @@ def main():
                                                           if x['Losing_trade_counter_tot'] > 0.0 else 0.0,
                                                           axis=1)
 
+            merged['filled'] = merged['filledPrice'].fillna(merged['filled'])
             merged["buy_hold"] = merged.apply(lambda x: x['filledPrice'] / start_price - 1.0, axis=1)
             merged['buy_hold_max'] = merged.buy_hold.shift(fill_value=0).cummax()
             merged["buy_hold_min"] = np.where((merged["buy_hold_max"] < merged["buy_hold_max"][1]),
@@ -126,7 +127,7 @@ def main():
             merged["Cumulative_Profit"] = merged.apply(lambda x: ((x['cumBal'] - x['startAlloc']) / x['startAlloc']), axis=1)
             merged['profitableTradesTot'] = merged['profitableTrades'].cumsum()
             print(start_price)
-            merged['Strategy_Percentage'] = merged.apply(lambda x: (x['filledPrice'] * (x['cumBal'] - x['startAlloc'])), axis=1) #
+            merged['Strategy_Percentage'] = merged.apply(lambda x: (x['filled'] * (x['cumBal'] - x['startAlloc'])), axis=1) # (x['filledPrice'] * x['cumBal']) /
             merged['Profitable_Trades_Perc'] = merged.apply(lambda x: x['profitableTradesTot'] / (x['tradeNo']+1), axis=1)
             merged["Cumulative_Profit_Max"] = merged.Cumulative_Profit.shift(fill_value=0).cummax()
             merged["Cumulative_Profit_Min"] = np.where((merged["Cumulative_Profit_Max"] < merged["Cumulative_Profit_Max"][1]),
