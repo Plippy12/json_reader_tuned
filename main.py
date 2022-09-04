@@ -109,7 +109,7 @@ def main():
                                                           if x['Losing_trade_counter_tot'] > 0.0 else 0.0,
                                                           axis=1)
 
-            merged['filled'] = merged['filledPrice'].fillna(merged['filled'])
+            merged['filled'] = merged['filledPrice'].ffill()
             merged["buy_hold"] = merged.apply(lambda x: x['filledPrice'] / start_price - 1.0, axis=1)
             merged['buy_hold_max'] = merged.buy_hold.shift(fill_value=0).cummax()
             merged["buy_hold_min"] = np.where((merged["buy_hold_max"] < merged["buy_hold_max"][1]),
