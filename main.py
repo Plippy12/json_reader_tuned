@@ -128,7 +128,7 @@ def main():
             merged["Cumulative_Profit"] = merged.apply(lambda x: ((x['cumBal'] - x['startAlloc']) / x['startAlloc']), axis=1)
             merged['profitableTradesTot'] = merged['profitableTrades'].cumsum()
             print(start_price)
-            merged['Strategy_Percentage'] = merged.apply(lambda x: ((first_filled * startAlloc) / (x['filledPrice'] * x['cumBal'])) - 1.0, axis=1) # (x['filledPrice'] * x['cumBal']) /
+
             merged['Profitable_Trades_Perc'] = merged.apply(lambda x: x['profitableTradesTot'] / (x['tradeNo']+1), axis=1)
             merged["Cumulative_Profit_Max"] = merged.Cumulative_Profit.shift(fill_value=0).cummax()
             merged["Cumulative_Profit_Min"] = np.where((merged["Cumulative_Profit_Max"] < merged["Cumulative_Profit_Max"][1]),
@@ -179,7 +179,9 @@ def main():
             y_range_min_2 = merged['minValBal'].min()
             x_range_max_2 = merged['filledTime'].max()
             x_range_min_2 = merged['filledTime'].min()
-
+            merged['Strategy_Percentage'] = merged.apply(
+                lambda x: ((first_filled * startAlloc) / (x['filledPrice'] * x['cumBal'])) - 1.0,
+                axis=1)  # (x['filledPrice'] * x['cumBal']) /
             nearest = alt.selection(type='single', nearest=True, on='mouseover',
                                     fields=['cumProf'], empty='none')
 
