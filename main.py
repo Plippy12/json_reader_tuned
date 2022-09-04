@@ -180,8 +180,8 @@ def main():
             x_range_max_2 = merged['filledTime'].max()
             x_range_min_2 = merged['filledTime'].min()
             merged['Strategy_Percentage'] = merged.apply(
-                lambda x: ((first_filled * startAlloc) / (x['filledPrice'] * x['cumBal'])) - 1.0,
-                axis=1)  # (x['filledPrice'] * x['cumBal']) /
+                lambda x: ((x['filledPrice'] * x['cumBal']) / (first_filled * startAlloc)) - 1.0,
+                axis=1)
             nearest = alt.selection(type='single', nearest=True, on='mouseover',
                                     fields=['cumProf'], empty='none')
 
