@@ -125,6 +125,7 @@ def main():
             merged['profitableTrades'] = merged.apply(lambda x: 1.0 if float(x['profit']) > 0.0 else 0.0, axis=1)
             merged["Cumulative_Profit"] = merged.apply(lambda x: ((x['cumBal'] - x['startAlloc']) / x['startAlloc']), axis=1)
             merged['profitableTradesTot'] = merged['profitableTrades'].cumsum()
+            print(start_price)
             merged['Strategy_Percentage'] = merged.apply(lambda x: ((x["buy_hold"] * (1.0 + x['Cumulative_Profit'])) + 1) * -1, axis=1)
             merged['Profitable_Trades_Perc'] = merged.apply(lambda x: x['profitableTradesTot'] / (x['tradeNo']+1), axis=1)
             merged["Cumulative_Profit_Max"] = merged.Cumulative_Profit.shift(fill_value=0).cummax()
