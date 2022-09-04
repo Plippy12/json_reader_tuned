@@ -424,7 +424,7 @@ def main():
             if check:
                 expander = st.expander(f'If using Coin Futures - Click here to see the '
                                     f'{data2["currencyPairDetails.quote"][1]} Comparisons')
-                expander.st.write(f"{merged['filledPrice']}")
+                expander.st.write(f"{merged['filledPrice'][-1]}")
                 expander.altair_chart(chart2, use_container_width=True)
 
             st.altair_chart(chart3, use_container_width=True)
