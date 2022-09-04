@@ -428,6 +428,7 @@ def main():
                                     f'{data2["currencyPairDetails.quote"][1]} Comparisons')
                 expander.altair_chart(chart2, use_container_width=True)
                 expander.write(f"{merged['filledPrice'][0]}")
+                expander.write(f"{first_filled}")
 
             st.altair_chart(chart3, use_container_width=True)
             st.altair_chart(chartmdd, use_container_width=True)
